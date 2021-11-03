@@ -1,6 +1,7 @@
 #pragma once
 
 #include <RTNeural/RTNeural.h>
+#include <nlohmann/json.hpp>
 
 class RT_LSTM
 {
@@ -8,8 +9,7 @@ public:
     RT_LSTM() = default;
 
     void reset();
-    //void load_json(const char* filename);
-    void load_json3(const char* filename);
+    void load_json3(const char* jsonFile);
 
     //void process(const float* inData, float* outData, int numSamples);
     void process(const float* inData, float param1, float param2, float* outData, int numSamples);

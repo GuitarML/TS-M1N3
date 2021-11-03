@@ -23,7 +23,7 @@ TSM1N3AudioProcessorEditor::TSM1N3AudioProcessorEditor (TSM1N3AudioProcessor& p)
     // editor's size to whatever you need it to
 
     // Set Widget Graphics
-    blackHexKnobLAF.setLookAndFeel(ImageCache::getFromMemory(BinaryData::black_knob_png, BinaryData::black_knob_pngSize));
+    blackHexKnobLAF.setLookAndFeel(ImageCache::getFromMemory(BinaryData::knob2_png, BinaryData::knob2_pngSize));
 
     addAndMakeVisible(odFootSw);
     odFootSw.setImages(true, true, true,
@@ -32,7 +32,6 @@ TSM1N3AudioProcessorEditor::TSM1N3AudioProcessorEditor (TSM1N3AudioProcessor& p)
         ImageCache::getFromMemory(BinaryData::footswitch_up_png, BinaryData::footswitch_up_pngSize), 1.0, Colours::transparentWhite,
         0.0);
     odFootSw.addListener(this);
-    
 
     addAndMakeVisible(odLED);
     odLED.setImages(true, true, true,
@@ -41,8 +40,6 @@ TSM1N3AudioProcessorEditor::TSM1N3AudioProcessorEditor (TSM1N3AudioProcessor& p)
         ImageCache::getFromMemory(BinaryData::led_red_on_png, BinaryData::led_red_on_pngSize), 1.0, Colours::transparentWhite,
         0.0);
     odLED.addListener(this);
-
-
 
     gainSliderAttach = std::make_unique<AudioProcessorValueTreeState::SliderAttachment>(processor.treeState, GAIN_ID, ampGainKnob);
     addAndMakeVisible(ampGainKnob);
@@ -53,7 +50,7 @@ TSM1N3AudioProcessorEditor::TSM1N3AudioProcessorEditor (TSM1N3AudioProcessor& p)
     ampGainKnob.setSliderStyle(juce::Slider::SliderStyle::RotaryVerticalDrag);
     ampGainKnob.setTextBoxStyle(juce::Slider::TextEntryBoxPosition::NoTextBox, false, 50, 20);
     ampGainKnob.setNumDecimalPlacesToDisplay(1);
-    ampGainKnob.setDoubleClickReturnValue(true, 0.0);
+    ampGainKnob.setDoubleClickReturnValue(true, 0.5);
 	
     toneSliderAttach = std::make_unique<AudioProcessorValueTreeState::SliderAttachment>(processor.treeState, TONE_ID, ampToneKnob);
     addAndMakeVisible(ampToneKnob);
@@ -64,7 +61,7 @@ TSM1N3AudioProcessorEditor::TSM1N3AudioProcessorEditor (TSM1N3AudioProcessor& p)
     ampToneKnob.setSliderStyle(juce::Slider::SliderStyle::RotaryVerticalDrag);
     ampToneKnob.setTextBoxStyle(juce::Slider::TextEntryBoxPosition::NoTextBox, false, 50, 20 );
     ampToneKnob.setNumDecimalPlacesToDisplay(1);
-    ampToneKnob.setDoubleClickReturnValue(true, 0.0);
+    ampToneKnob.setDoubleClickReturnValue(true, 0.5);
 
     masterSliderAttach = std::make_unique<AudioProcessorValueTreeState::SliderAttachment>(processor.treeState, MASTER_ID, ampMasterKnob);
     addAndMakeVisible(ampMasterKnob);
@@ -79,6 +76,7 @@ TSM1N3AudioProcessorEditor::TSM1N3AudioProcessorEditor (TSM1N3AudioProcessor& p)
 
     // Size of plugin GUI
     setSize(370, 560);
+    resetImages();
 }
 
 TSM1N3AudioProcessorEditor::~TSM1N3AudioProcessorEditor()
@@ -108,9 +106,12 @@ void TSM1N3AudioProcessorEditor::resized()
     // subcomponents in your editor..
 
     // Amp Widgets
-    ampGainKnob.setBounds(10, 120, 75, 95);
-    ampMasterKnob.setBounds(95, 120, 75, 95);
-    ampToneKnob.setBounds(10, 250, 75, 95);
+    ampGainKnob.setBounds(32, 22, 125, 95);
+    ampMasterKnob.setBounds(214, 22, 125, 95);
+    ampToneKnob.setBounds(125, 105, 125, 95);
+
+    odLED.setBounds(169, 350, 40, 40);
+    odFootSw.setBounds(150, 400, 80, 80);
 }
 
 

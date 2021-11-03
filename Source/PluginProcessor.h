@@ -80,9 +80,9 @@ public:
 
     // Pedal/amp states
     int fw_state = 1; // 0 = off, 1 = on
-    float driveValue;
-    float toneValue;
-    float masterValue;
+    float driveValue = 0.5;
+    float toneValue = 0.5;
+    float masterValue = 0.5;
 
     File loaded_tone;
     juce::String loaded_tone_name;

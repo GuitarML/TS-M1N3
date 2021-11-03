@@ -7,13 +7,15 @@
               displaySplashScreen="1" companyEmail="smartguitarml@gmail.com">
   <MAINGROUP id="zI9r2C" name="TS-M1N3">
     <GROUP id="{810D2D07-FCAC-0F25-F63F-DCF49FEE10C7}" name="Resources">
-      <FILE id="c1gQaX" name="black_knob.png" compile="0" resource="1" file="resources/black_knob.png"/>
       <FILE id="UJNCN4" name="footswitch_down.png" compile="0" resource="1"
             file="resources/footswitch_down.png"/>
       <FILE id="ib5UnN" name="footswitch_up.png" compile="0" resource="1"
             file="resources/footswitch_up.png"/>
+      <FILE id="O5qkBc" name="knob2.png" compile="0" resource="1" file="resources/knob2.png"/>
       <FILE id="rVFjFz" name="led_red_off.png" compile="0" resource="1" file="resources/led_red_off.png"/>
       <FILE id="lxxYFZ" name="led_red_on.png" compile="0" resource="1" file="resources/led_red_on.png"/>
+      <FILE id="HKGzYy" name="model_ts9_48k_cond2.json" compile="0" resource="1"
+            file="models/model_ts9_48k_cond2.json"/>
       <FILE id="e937st" name="model_ts9_cond2.json" compile="0" resource="1"
             file="models/model_ts9_cond2.json"/>
       <FILE id="FlQgZU" name="ts_background_black.jpg" compile="0" resource="1"

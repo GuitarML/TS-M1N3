@@ -25,10 +25,8 @@ TSM1N3AudioProcessor::TSM1N3AudioProcessor()
 #endif
     ),    
     treeState(*this, nullptr, "PARAMETER", { std::make_unique<AudioParameterFloat>(GAIN_ID, GAIN_NAME, NormalisableRange<float>(0.0f, 1.0f, 0.01f), 0.0f),
-
                         std::make_unique<AudioParameterFloat>(TONE_ID, TONE_NAME, NormalisableRange<float>(0.0f, 1.0f, 0.01f), 0.0f),
-
-                        std::make_unique<AudioParameterFloat>(MASTER_ID, MASTER_NAME, NormalisableRange<float>(-36.0f, 0.0f, 0.01f), 0.0f) })
+                        std::make_unique<AudioParameterFloat>(MASTER_ID, MASTER_NAME, NormalisableRange<float>(-36.0f, 0.0f, 0.01f), -18.0) })
 
 #endif
 {
@@ -161,14 +159,7 @@ void TSM1N3AudioProcessor::processBlock (AudioBuffer<float>& buffer, MidiBuffer&
 
     // Amp =============================================================================
     if (fw_state == 1) {
-
-
-        //buffer.applyGain(gain * 2.0);
- 
-
-   
         // Apply LSTM model
-
         LSTM.process(buffer.getReadPointer(0), driveValue, toneValue, buffer.getWritePointer(0), numSamples);
       
         //    Master Volume 
@@ -237,7 +228,9 @@ void TSM1N3AudioProcessor::loadConfig()
     // Check input size for conditioned models
     // read JSON file
     //std::ifstream i2(char_filename);
-    //nlohmann::json weights_json;
+    //var a = BinaryData::model_ts9_cond2_json;
+    //std::ifstream i2(a);
+    //nlohmann::json weights_json = BinaryData::model_ts9_48k_cond2_json;
     //i2 >> weights_json;
 
     LSTM.load_json3(jsonFile);
