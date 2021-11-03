@@ -28,12 +28,12 @@
 //==============================================================================
 /**
 */
-class TS-M1N3AudioProcessor  : public AudioProcessor
+class TSM1N3AudioProcessor  : public AudioProcessor
 {
 public:
     //==============================================================================
-    TS-M1N3AudioProcessor();
-    ~TS-M1N3AudioProcessor();
+    TSM1N3AudioProcessor();
+    ~TSM1N3AudioProcessor();
 
     //==============================================================================
     void prepareToPlay (double sampleRate, int samplesPerBlock) override;
@@ -74,10 +74,12 @@ public:
 
     void setDrive(float paramDrive);
     void setTone(float paramTone);
-    void setMaster(float db_ampMaster)
+    void setMaster(float db_ampMaster);
+
+    void loadConfig();
 
     // Pedal/amp states
-    int amp_state = 1; // 0 = off, 1 = on
+    int fw_state = 1; // 0 = off, 1 = on
     float driveValue;
     float toneValue;
     float masterValue;
@@ -94,6 +96,8 @@ public:
 
     AudioProcessorValueTreeState treeState;
 
+    const char* jsonFile = "C:\\Users\\rache\\Desktop\\dev\\TS-M1N3\\models\\model_ts9_cond2.json";
+
 private:
     var dummyVar;
 
@@ -101,5 +105,5 @@ private:
     dsp::IIR::Filter<float> dcBlocker;
 
     //==============================================================================
-    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (TS-M1N3AudioProcessor)
+    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (TSM1N3AudioProcessor)
 };

@@ -14,7 +14,7 @@
 #include <fstream>
 
 //==============================================================================
-TS-M1N3AudioProcessor::TS-M1N3AudioProcessor()
+TSM1N3AudioProcessor::TSM1N3AudioProcessor()
 #ifndef JucePlugin_PreferredChannelConfigurations
     : AudioProcessor(BusesProperties()
 #if ! JucePlugin_IsMidiEffect
@@ -32,22 +32,22 @@ TS-M1N3AudioProcessor::TS-M1N3AudioProcessor()
 
 #endif
 {
-    loadConfig(jsonFiles[current_model_index]);
-
+    //loadConfig(BinaryData::model_ts9_cond2_json);
+    loadConfig();
 }
 
 
-TS-M1N3AudioProcessor::~TS-M1N3AudioProcessor()
+TSM1N3AudioProcessor::~TSM1N3AudioProcessor()
 {
 }
 
 //==============================================================================
-const String TS-M1N3AudioProcessor::getName() const
+const String TSM1N3AudioProcessor::getName() const
 {
     return JucePlugin_Name;
 }
 
-bool TS-M1N3AudioProcessor::acceptsMidi() const
+bool TSM1N3AudioProcessor::acceptsMidi() const
 {
    #if JucePlugin_WantsMidiInput
     return true;
@@ -56,7 +56,7 @@ bool TS-M1N3AudioProcessor::acceptsMidi() const
    #endif
 }
 
-bool TS-M1N3AudioProcessor::producesMidi() const
+bool TSM1N3AudioProcessor::producesMidi() const
 {
    #if JucePlugin_ProducesMidiOutput
     return true;
@@ -65,7 +65,7 @@ bool TS-M1N3AudioProcessor::producesMidi() const
    #endif
 }
 
-bool TS-M1N3AudioProcessor::isMidiEffect() const
+bool TSM1N3AudioProcessor::isMidiEffect() const
 {
    #if JucePlugin_IsMidiEffect
     return true;
@@ -74,37 +74,37 @@ bool TS-M1N3AudioProcessor::isMidiEffect() const
    #endif
 }
 
-double TS-M1N3AudioProcessor::getTailLengthSeconds() const
+double TSM1N3AudioProcessor::getTailLengthSeconds() const
 {
     return 0.0;
 }
 
-int TS-M1N3AudioProcessor::getNumPrograms()
+int TSM1N3AudioProcessor::getNumPrograms()
 {
     return 1;   // NB: some hosts don't cope very well if you tell them there are 0 programs,
                 // so this should be at least 1, even if you're not really implementing programs.
 }
 
-int TS-M1N3AudioProcessor::getCurrentProgram()
+int TSM1N3AudioProcessor::getCurrentProgram()
 {
     return 0;
 }
 
-void TS-M1N3AudioProcessor::setCurrentProgram (int index)
+void TSM1N3AudioProcessor::setCurrentProgram (int index)
 {
 }
 
-const String TS-M1N3AudioProcessor::getProgramName (int index)
+const String TSM1N3AudioProcessor::getProgramName (int index)
 {
     return {};
 }
 
-void TS-M1N3AudioProcessor::changeProgramName (int index, const String& newName)
+void TSM1N3AudioProcessor::changeProgramName (int index, const String& newName)
 {
 }
 
 //==============================================================================
-void TS-M1N3AudioProcessor::prepareToPlay (double sampleRate, int samplesPerBlock)
+void TSM1N3AudioProcessor::prepareToPlay (double sampleRate, int samplesPerBlock)
 {
     // Use this method as the place to do any pre-playback
     // initialisation that you need..
@@ -116,14 +116,14 @@ void TS-M1N3AudioProcessor::prepareToPlay (double sampleRate, int samplesPerBloc
     dcBlocker.prepare(spec);
 }
 
-void TS-M1N3AudioProcessor::releaseResources()
+void TSM1N3AudioProcessor::releaseResources()
 {
     // When playback stops, you can use this as an opportunity to free up any
     // spare memory, etc.
 }
 
 #ifndef JucePlugin_PreferredChannelConfigurations
-bool TS-M1N3AudioProcessor::isBusesLayoutSupported (const BusesLayout& layouts) const
+bool TSM1N3AudioProcessor::isBusesLayoutSupported (const BusesLayout& layouts) const
 {
   #if JucePlugin_IsMidiEffect
     ignoreUnused (layouts);
@@ -147,7 +147,7 @@ bool TS-M1N3AudioProcessor::isBusesLayoutSupported (const BusesLayout& layouts) 
 #endif
 
 
-void TS-M1N3AudioProcessor::processBlock (AudioBuffer<float>& buffer, MidiBuffer& midiMessages)
+void TSM1N3AudioProcessor::processBlock (AudioBuffer<float>& buffer, MidiBuffer& midiMessages)
 {
     ScopedNoDenormals noDenormals;
 
@@ -160,7 +160,7 @@ void TS-M1N3AudioProcessor::processBlock (AudioBuffer<float>& buffer, MidiBuffer
     auto context = juce::dsp::ProcessContextReplacing<float>(block);
 
     // Amp =============================================================================
-    if (amp_state == 1) {
+    if (fw_state == 1) {
 
 
         //buffer.applyGain(gain * 2.0);
@@ -185,18 +185,18 @@ void TS-M1N3AudioProcessor::processBlock (AudioBuffer<float>& buffer, MidiBuffer
 }
 
 //==============================================================================
-bool TS-M1N3AudioProcessor::hasEditor() const
+bool TSM1N3AudioProcessor::hasEditor() const
 {
     return true; // (change this to false if you choose to not supply an editor)
 }
 
-AudioProcessorEditor* TS-M1N3AudioProcessor::createEditor()
+AudioProcessorEditor* TSM1N3AudioProcessor::createEditor()
 {
-    return new TS-M1N3AudioProcessorEditor (*this);
+    return new TSM1N3AudioProcessorEditor (*this);
 }
 
 //==============================================================================
-void TS-M1N3AudioProcessor::getStateInformation (MemoryBlock& destData)
+void TSM1N3AudioProcessor::getStateInformation (MemoryBlock& destData)
 {
     // You should use this method to store your parameters in the memory block.
     // You could do that either as raw data, or use the XML or ValueTree classes
@@ -204,11 +204,10 @@ void TS-M1N3AudioProcessor::getStateInformation (MemoryBlock& destData)
 
     auto state = treeState.copyState();
     std::unique_ptr<XmlElement> xml (state.createXml());
-    xml->setAttribute ("current_tone", current_model_index);
     copyXmlToBinary (*xml, destData);
 }
 
-void TS-M1N3AudioProcessor::setStateInformation (const void* data, int sizeInBytes)
+void TSM1N3AudioProcessor::setStateInformation (const void* data, int sizeInBytes)
 {
     // You should use this method to restore your parameters from this memory block,
     // whose contents will have been created by the getStateInformation() call.
@@ -220,22 +219,8 @@ void TS-M1N3AudioProcessor::setStateInformation (const void* data, int sizeInByt
         if (xmlState->hasTagName (treeState.state.getType()))
         {
             treeState.replaceState (juce::ValueTree::fromXml (*xmlState));
-            current_model_index = xmlState->getIntAttribute ("current_tone");
 
-            switch (current_model_index)
-            {
-            case 0:
-                loadConfig (red_tone);
-                break;
-            case 1:
-                loadConfig (gold_tone);
-                break;
-            case 2:
-                loadConfig (green_tone);
-                break;
-            }
-
-            if (auto* editor = dynamic_cast<TS-M1N3AudioProcessorEditor*> (getActiveEditor()))
+            if (auto* editor = dynamic_cast<TSM1N3AudioProcessorEditor*> (getActiveEditor()))
                 editor->resetImages();
         }
     }
@@ -243,41 +228,26 @@ void TS-M1N3AudioProcessor::setStateInformation (const void* data, int sizeInByt
 
 
 
-void TS-M1N3AudioProcessor::loadConfig(File configFile)
+void TSM1N3AudioProcessor::loadConfig()
 {
-    this->suspendProcessing(true);
-    String path = configFile.getFullPathName();
-    char_filename = path.toUTF8();
+    //this->suspendProcessing(true);
+    //String path = configFile.getFullPathName();
+    //char_filename = path.toUTF8();
 
-    try {
-        // Check input size for conditioned models
-        // read JSON file
-        std::ifstream i2(char_filename);
-        nlohmann::json weights_json;
-        i2 >> weights_json;
+    // Check input size for conditioned models
+    // read JSON file
+    //std::ifstream i2(char_filename);
+    //nlohmann::json weights_json;
+    //i2 >> weights_json;
 
-        int input_size_json = weights_json["/model_data/input_size"_json_pointer];
-        LSTM.input_size = input_size_json;
-        if (input_size_json == 1) {
-            is_conditioned = false;
-            LSTM.load_json(char_filename);
-        }
-        else {
-            is_conditioned = true;
-            LSTM.load_json2(char_filename);
-        }
-        model_loaded = 1;
-    }
-    catch (const std::exception& e) {
-        DBG("Unable to load json file: " + configFile.getFullPathName());
-        std::cout << e.what();
-    }
+    LSTM.load_json3(jsonFile);
+
 
     this->suspendProcessing(false);
 }
 
 
-float TS-M1N3AudioProcessor::convertLogScale(float in_value, float x_min, float x_max, float y_min, float y_max)
+float TSM1N3AudioProcessor::convertLogScale(float in_value, float x_min, float x_max, float y_min, float y_max)
 {
     float b = log(y_max / y_min) / (x_max - x_min);
     float a = y_max / exp(b * x_max);
@@ -286,28 +256,28 @@ float TS-M1N3AudioProcessor::convertLogScale(float in_value, float x_min, float 
 }
 
 
-float TS-M1N3AudioProcessor::decibelToLinear(float dbValue)
+float TSM1N3AudioProcessor::decibelToLinear(float dbValue)
 {
     return powf(10.0, dbValue/20.0);
 }
 
-void TS-M1N3AudioProcessor::setDrive(float paramDrive)
+void TSM1N3AudioProcessor::setDrive(float paramDrive)
 {
     driveValue = paramDrive;
 }
 
-void TS-M1N3AudioProcessor::setTone(float paramTone)
+void TSM1N3AudioProcessor::setTone(float paramTone)
 {
     toneValue = paramTone;
 }
 
-void TS-M1N3AudioProcessor::setMaster(float db_ampMaster)
+void TSM1N3AudioProcessor::setMaster(float db_ampMaster)
 {
-    ampMasterKnobState = db_ampMaster;
+    //ampMasterKnobState = db_ampMaster;
     if (db_ampMaster == -36.0) {
-        ampMaster = decibelToLinear(-100.0);
+        masterValue = decibelToLinear(-100.0);
     } else {
-        ampMaster = decibelToLinear(db_ampMaster);
+        masterValue = decibelToLinear(db_ampMaster);
     }
 }
 
@@ -316,5 +286,5 @@ void TS-M1N3AudioProcessor::setMaster(float db_ampMaster)
 // This creates new instances of the plugin..
 AudioProcessor* JUCE_CALLTYPE createPluginFilter()
 {
-    return new TS-M1N3AudioProcessor();
+    return new TSM1N3AudioProcessor();
 }

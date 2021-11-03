@@ -12,7 +12,7 @@ public:
     void load_json3(const char* filename);
 
     //void process(const float* inData, float* outData, int numSamples);
-    void process(const float* inData, float param1, fload param2, float* outData, int numSamples);
+    void process(const float* inData, float param1, float param2, float* outData, int numSamples);
 
     int input_size = 3;
     
@@ -21,5 +21,6 @@ private:
         RTNeural::LSTMLayerT<float, 3, 20>,
         RTNeural::DenseT<float, 20, 1>> model_cond2;
 
-    float inArray[2] = { 0.0, 0.0, 0.0 };
+    float inArray alignas(16)[3] = { 0.0, 0.0, 0.0 };
+    //float inArray[2] = { 0.0, 0.0, 0.0 };
 };

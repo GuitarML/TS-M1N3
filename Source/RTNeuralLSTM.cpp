@@ -57,7 +57,7 @@ void RT_LSTM::process(const float* inData, float param1, float param2, float* ou
     for (int i = 0; i < numSamples; ++i) {
         inArray[0] = inData[i];
         inArray[1] = param1;
-	inArray[2] = param2;
-        outData[i] = model_cond1.forward(inArray) + inData[i];
+	    inArray[2] = param2;
+        outData[i] = model_cond2.forward(inArray) + inData[i];
     }
 }
