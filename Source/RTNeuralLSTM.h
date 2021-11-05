@@ -9,7 +9,8 @@ public:
     RT_LSTM() = default;
 
     void reset();
-    void load_json3(const char* jsonFile);
+    //void load_json3(const char* jsonFile);
+    void load_json3(const nlohmann::json& weights_json);
 
     //void process(const float* inData, float* outData, int numSamples);
     void process(const float* inData, float param1, float param2, float* outData, int numSamples);

@@ -98,6 +98,8 @@ public:
 
     const char* jsonFile = "C:\\Users\\rache\\Desktop\\dev\\TS-M1N3\\models\\model_ts9_cond2.json";
 
+    int currentSampleRate = 44100;
+
 private:
     var dummyVar;
 

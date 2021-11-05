@@ -154,6 +154,12 @@ void TSM1N3AudioProcessor::processBlock (AudioBuffer<float>& buffer, MidiBuffer&
     const int numInputChannels = getTotalNumInputChannels();
     const int sampleRate = getSampleRate();
 
+    if (currentSampleRate != sampleRate) {
+        currentSampleRate = sampleRate;
+        loadConfig();
+    }
+    
+
     auto block = dsp::AudioBlock<float>(buffer).getSingleChannelBlock(0);
     auto context = juce::dsp::ProcessContextReplacing<float>(block);
 
@@ -221,19 +227,16 @@ void TSM1N3AudioProcessor::setStateInformation (const void* data, int sizeInByte
 
 void TSM1N3AudioProcessor::loadConfig()
 {
-    //this->suspendProcessing(true);
-    //String path = configFile.getFullPathName();
-    //char_filename = path.toUTF8();
-
-    // Check input size for conditioned models
-    // read JSON file
-    //std::ifstream i2(char_filename);
-    //var a = BinaryData::model_ts9_cond2_json;
-    //std::ifstream i2(a);
-    //nlohmann::json weights_json = BinaryData::model_ts9_48k_cond2_json;
-    //i2 >> weights_json;
-
-    LSTM.load_json3(jsonFile);
+    nlohmann::json weights_json;
+    if (currentSampleRate >= 48000) {
+        MemoryInputStream jsonInputStream(BinaryData::model_ts9_48k_cond2_json, BinaryData::model_ts9_48k_cond2_jsonSize, false);
+        weights_json = nlohmann::json::parse(jsonInputStream.readEntireStreamAsString().toStdString());
+    } else {
+        MemoryInputStream jsonInputStream(BinaryData::model_ts9_cond2_json, BinaryData::model_ts9_cond2_jsonSize, false);
+        weights_json = nlohmann::json::parse(jsonInputStream.readEntireStreamAsString().toStdString());
+    }
+    
+    LSTM.load_json3(weights_json);
 
 
     this->suspendProcessing(false);

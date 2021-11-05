@@ -18,15 +18,15 @@ Vec2d transpose(const Vec2d& x)
 }
 
 
-void RT_LSTM::load_json3(const char* jsonFile)
+void RT_LSTM::load_json3(const nlohmann::json& weights_json)
 {
     auto& lstm = model_cond2.get<0>();
     auto& dense = model_cond2.get<1>();
 
     // read a JSON file
-    std::ifstream i2(jsonFile);
-    nlohmann::json weights_json;
-    i2 >> weights_json;
+    //std::ifstream i2(jsonFile);
+    //nlohmann::json weights_json;
+    //i2 >> weights_json;
 
 
     Vec2d lstm_weights_ih = weights_json["/state_dict/rec.weight_ih_l0"_json_pointer];
