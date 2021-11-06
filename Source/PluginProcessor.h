@@ -17,17 +17,13 @@
 
 #define GAIN_ID "gain"
 #define GAIN_NAME "Gain"
-
 #define MASTER_ID "master"
 #define MASTER_NAME "Master"
-
 #define TONE_ID "tone"
 #define TONE_NAME "Tone"
 
 
 //==============================================================================
-/**
-*/
 class TSM1N3AudioProcessor  : public AudioProcessor
 {
 public:
@@ -68,7 +64,7 @@ public:
     void getStateInformation (MemoryBlock& destData) override;
     void setStateInformation (const void* data, int sizeInBytes) override;
     
-    float convertLogScale(float in_value, float x_min, float x_max, float y_min, float y_max);
+    //float convertLogScale(float in_value, float x_min, float x_max, float y_min, float y_max);
 
     float decibelToLinear(float dbValue);
 
@@ -84,27 +80,17 @@ public:
     float toneValue = 0.5;
     float masterValue = 0.5;
 
-    File loaded_tone;
-    juce::String loaded_tone_name;
-    const char* char_filename = "";
-
-    bool lstm_state = true;
-
-    juce::String loaded_ir_name;
+    bool lstm_state = true;;
 
     RT_LSTM LSTM;
 
     AudioProcessorValueTreeState treeState;
 
-    const char* jsonFile = "C:\\Users\\rache\\Desktop\\dev\\TS-M1N3\\models\\model_ts9_cond2.json";
-
     int currentSampleRate = 44100;
 
 private:
-    var dummyVar;
-
-
-    dsp::IIR::Filter<float> dcBlocker;
+    //var dummyVar;
+    //dsp::IIR::Filter<float> dcBlocker;
 
     //==============================================================================
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (TSM1N3AudioProcessor)

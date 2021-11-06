@@ -109,9 +109,9 @@ void TSM1N3AudioProcessor::prepareToPlay (double sampleRate, int samplesPerBlock
     LSTM.reset();
 
     // set up DC blocker
-    dcBlocker.coefficients = dsp::IIR::Coefficients<float>::makeHighPass(sampleRate, 35.0f);
-    dsp::ProcessSpec spec{ sampleRate, static_cast<uint32> (samplesPerBlock), 2 };
-    dcBlocker.prepare(spec);
+    //dcBlocker.coefficients = dsp::IIR::Coefficients<float>::makeHighPass(sampleRate, 35.0f);
+    //dsp::ProcessSpec spec{ sampleRate, static_cast<uint32> (samplesPerBlock), 2 };
+    //dcBlocker.prepare(spec);
 }
 
 void TSM1N3AudioProcessor::releaseResources()
@@ -174,8 +174,8 @@ void TSM1N3AudioProcessor::processBlock (AudioBuffer<float>& buffer, MidiBuffer&
     }
 
     // process DC blocker
-    auto monoBlock = dsp::AudioBlock<float>(buffer).getSingleChannelBlock(0);
-    dcBlocker.process(dsp::ProcessContextReplacing<float>(monoBlock));
+    //auto monoBlock = dsp::AudioBlock<float>(buffer).getSingleChannelBlock(0);
+    //dcBlocker.process(dsp::ProcessContextReplacing<float>(monoBlock));
     
     for (int ch = 1; ch < buffer.getNumChannels(); ++ch)
         buffer.copyFrom(ch, 0, buffer, 0, 0, buffer.getNumSamples());
@@ -238,11 +238,10 @@ void TSM1N3AudioProcessor::loadConfig()
     
     LSTM.load_json3(weights_json);
 
-
     this->suspendProcessing(false);
 }
 
-
+/* // UNUSED but kept as a template for future plugins
 float TSM1N3AudioProcessor::convertLogScale(float in_value, float x_min, float x_max, float y_min, float y_max)
 {
     float b = log(y_max / y_min) / (x_max - x_min);
@@ -250,7 +249,7 @@ float TSM1N3AudioProcessor::convertLogScale(float in_value, float x_min, float x
     float converted_value = a * exp(b * in_value);
     return converted_value;
 }
-
+*/
 
 float TSM1N3AudioProcessor::decibelToLinear(float dbValue)
 {

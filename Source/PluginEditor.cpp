@@ -75,7 +75,7 @@ TSM1N3AudioProcessorEditor::TSM1N3AudioProcessorEditor (TSM1N3AudioProcessor& p)
     ampMasterKnob.setDoubleClickReturnValue(true, -18.0);
 
     // Size of plugin GUI
-    setSize(370, 560);
+    setSize(340, 500);
     resetImages();
 }
 
@@ -106,24 +106,26 @@ void TSM1N3AudioProcessorEditor::resized()
     // subcomponents in your editor..
 
     // Amp Widgets
-    ampGainKnob.setBounds(32, 22, 125, 95);
-    ampMasterKnob.setBounds(214, 22, 125, 95);
-    ampToneKnob.setBounds(125, 105, 125, 95);
+    ampGainKnob.setBounds(20, 13, 125, 95);
+    ampMasterKnob.setBounds(196, 13, 125, 95);
+    ampToneKnob.setBounds(110, 91, 125, 95);
 
-    odLED.setBounds(169, 350, 40, 40);
-    odFootSw.setBounds(150, 400, 80, 80);
+    odLED.setBounds(152, 315, 40, 40);
+    odFootSw.setBounds(133, 365, 80, 80);
 }
 
 
 
 void TSM1N3AudioProcessorEditor::buttonClicked(juce::Button* button)
 {
-    if (processor.fw_state == 0)
-        processor.fw_state = 1;
-    else
-        processor.fw_state = 0;
+    if (button == &odFootSw) {
+        if (processor.fw_state == 0)
+            processor.fw_state = 1;
+        else
+            processor.fw_state = 0;
 
-    resetImages();
+        resetImages();
+    }
 }
 
 
