@@ -26,7 +26,7 @@ TSM1N3AudioProcessor::TSM1N3AudioProcessor()
     ),    
     treeState(*this, nullptr, "PARAMETER", { std::make_unique<AudioParameterFloat>(GAIN_ID, GAIN_NAME, NormalisableRange<float>(0.0f, 1.0f, 0.01f), 0.0f),
                         std::make_unique<AudioParameterFloat>(TONE_ID, TONE_NAME, NormalisableRange<float>(0.0f, 1.0f, 0.01f), 0.0f),
-                        std::make_unique<AudioParameterFloat>(MASTER_ID, MASTER_NAME, NormalisableRange<float>(-36.0f, 0.0f, 0.01f), -18.0) })
+                        std::make_unique<AudioParameterFloat>(MASTER_ID, MASTER_NAME, NormalisableRange<float>(0.0f, 1.0f, 0.01f), 0.5) })
 
 #endif
 {
@@ -159,18 +159,24 @@ void TSM1N3AudioProcessor::processBlock (AudioBuffer<float>& buffer, MidiBuffer&
         loadConfig();
     }
     
-
-    auto block = dsp::AudioBlock<float>(buffer).getSingleChannelBlock(0);
-    auto context = juce::dsp::ProcessContextReplacing<float>(block);
+    //auto block = dsp::AudioBlock<float>(buffer).getSingleChannelBlock(0);
+    //auto context = juce::dsp::ProcessContextReplacing<float>(block);
 
     // Amp =============================================================================
     if (fw_state == 1) {
         // Apply LSTM model
         LSTM.process(buffer.getReadPointer(0), driveValue, toneValue, buffer.getWritePointer(0), numSamples);
       
-        //    Master Volume 
-        buffer.applyGain(masterValue * 2.0); // Adding volume range (2x) mainly for clean models
-
+        // Master Volume 
+        // Apply ramped changes for gain smoothing
+        if (masterValue == previousMasterValue)
+        {
+            buffer.applyGain(masterValue);
+        }
+        else {
+            buffer.applyGainRamp(0, buffer.getNumSamples(), previousMasterValue , masterValue);
+            previousMasterValue = masterValue;
+        }
     }
 
     // process DC blocker
@@ -223,8 +229,6 @@ void TSM1N3AudioProcessor::setStateInformation (const void* data, int sizeInByte
     }
 }
 
-
-
 void TSM1N3AudioProcessor::loadConfig()
 {
     nlohmann::json weights_json;
@@ -268,12 +272,7 @@ void TSM1N3AudioProcessor::setTone(float paramTone)
 
 void TSM1N3AudioProcessor::setMaster(float db_ampMaster)
 {
-    //ampMasterKnobState = db_ampMaster;
-    if (db_ampMaster == -36.0) {
-        masterValue = decibelToLinear(-100.0);
-    } else {
-        masterValue = decibelToLinear(db_ampMaster);
-    }
+    masterValue = db_ampMaster;
 }
 
 

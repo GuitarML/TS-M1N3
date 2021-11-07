@@ -16,7 +16,14 @@ public:
     void process(const float* inData, float param1, float param2, float* outData, int numSamples);
 
     int input_size = 3;
-    
+
+    float previousParam1 = 0.0;
+    float previousParam2 = 0.0;
+    float steppedValue1 = 0.0;
+    float steppedValue2 = 0.0;
+    bool changedParam1 = false;
+    bool changedParam2 = false;
+
 private:
     RTNeural::ModelT<float, 3, 1,
         RTNeural::LSTMLayerT<float, 3, 20>,

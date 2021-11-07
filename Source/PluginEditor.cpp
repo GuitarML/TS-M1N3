@@ -67,12 +67,12 @@ TSM1N3AudioProcessorEditor::TSM1N3AudioProcessorEditor (TSM1N3AudioProcessor& p)
     addAndMakeVisible(ampMasterKnob);
     ampMasterKnob.setLookAndFeel(&blackHexKnobLAF);
     ampMasterKnob.addListener(this);
-    ampMasterKnob.setRange(-36.0, 0.0);
+    ampMasterKnob.setRange(0.0, 1.0);
     ampMasterKnob.setValue(processor.masterValue);
     ampMasterKnob.setSliderStyle(juce::Slider::SliderStyle::RotaryVerticalDrag);
     ampMasterKnob.setTextBoxStyle(juce::Slider::TextEntryBoxPosition::NoTextBox, false, 50, 20 );
     ampMasterKnob.setNumDecimalPlacesToDisplay(1);
-    ampMasterKnob.setDoubleClickReturnValue(true, -18.0);
+    ampMasterKnob.setDoubleClickReturnValue(true, 0.5);
 
     // Size of plugin GUI
     setSize(340, 500);

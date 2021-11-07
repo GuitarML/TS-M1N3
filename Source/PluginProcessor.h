@@ -79,6 +79,7 @@ public:
     float driveValue = 0.5;
     float toneValue = 0.5;
     float masterValue = 0.5;
+    float previousMasterValue = 0.5;
 
     bool lstm_state = true;;
 
@@ -89,8 +90,7 @@ public:
     int currentSampleRate = 44100;
 
 private:
-    //var dummyVar;
-    //dsp::IIR::Filter<float> dcBlocker;
+    //dsp::IIR::Filter<float> dcBlocker;  // Unused for TS-M1N3 plugin, leaving commented as template for future plugins
 
     //==============================================================================
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (TSM1N3AudioProcessor)
