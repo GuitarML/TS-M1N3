@@ -18,26 +18,26 @@ if(UNIX AND NOT APPLE)
     list(APPEND JUCE_FORMATS LV2)
 endif()
 
-juce_add_plugin(NeuralPi
+juce_add_plugin(TS-M1N3
     COMPANY_NAME GuitarML
     PLUGIN_MANUFACTURER_CODE GtML
-    PLUGIN_CODE Npi3 
+    PLUGIN_CODE Tsm3 
     FORMATS ${JUCE_FORMATS}
-    ProductName "NeuralPi"
-    LV2_URI https://github.com/GuitarML/NeuralPi
+    ProductName "TS-M1N3"
+    LV2_URI https://github.com/GuitarML/TS-M1N3
     ICON_BIG resources/logo.png
     MICROPHONE_PERMISSION_ENABLED TRUE
 )
 
 # create JUCE header
-juce_generate_juce_header(NeuralPi)
+juce_generate_juce_header(TS-M1N3)
 
 # add sources
 add_subdirectory(Source)
 include_directories(Source)
 add_subdirectory(resources)
 
-target_compile_definitions(NeuralPi
+target_compile_definitions(TS-M1N3
     PUBLIC
     JUCE_DISPLAY_SPLASH_SCREEN=0
     JUCE_REPORT_APP_USAGE=0
@@ -46,7 +46,7 @@ target_compile_definitions(NeuralPi
     JUCE_VST3_CAN_REPLACE_VST2=0
 )
 
-target_link_libraries(NeuralPi PUBLIC
+target_link_libraries(TS-M1N3 PUBLIC
     juce_plugin_modules
 )
 
@@ -54,6 +54,6 @@ target_link_libraries(NeuralPi PUBLIC
 option(MACOS_RELEASE "Set build flags for MacOS Release" OFF)
 if(MACOS_RELEASE)
     message(STATUS "Setting MacOS release flags...")
-    set_target_properties(NeuralPi_Standalone PROPERTIES
+    set_target_properties(TS-M1N3_Standalone PROPERTIES
         XCODE_ATTRIBUTE_ENABLE_HARDENED_RUNTIME YES)
 endif()
