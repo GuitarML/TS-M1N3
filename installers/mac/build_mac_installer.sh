@@ -24,7 +24,7 @@ rm LICENSE.txt
 # sign the installer package
 echo "Signing installer package..."
 TEAM_ID=$(more ~/Developer/mac_id)
-pkg_dir=NeuralPi_Installer_Packaged
+pkg_dir=TS-M1N3_Installer_Packaged
 rm -Rf $pkg_dir
 mkdir $pkg_dir
 productsign -s "$TEAM_ID" ../../build/TS-M1N3.pkg $pkg_dir/TS-M1N3-signed.pkg
