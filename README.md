@@ -18,7 +18,7 @@ The plugin uses [RTNeural](https://github.com/jatinchowdhury18/RTNeural), which 
 
 This plugin uses two json model files, one for 44.1kHz and one for 48kHz audio. The only difference is that the source training data is at the intended samplerate, 44.1kHz or 48kHz. Other samplerates can be used, but the sound may be distorted slightly.
 
-For the training data, five steps for the gain and tone knobs were recorded (0.0, 0.25, 0.50, 0.75, 1.0), for a total of 25 output samples. 2 minute samples were sufficient to obtain a validation loss of 0.0036. An LSTM layer with a hidden size of 20 was used.
+For the training data, five steps for the gain and tone knobs were recorded (0.0, 0.25, 0.50, 0.75, 1.0), for a total of 25 output samples at 2 minutes each. An LSTM layer with a hidden size of 20 was used.
 
 ## Build Instructions
 
