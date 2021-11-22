@@ -15,10 +15,10 @@
 
 #include "../JuceLibraryCode/JuceHeader.h"
 
-#define GAIN_ID "gain"
-#define GAIN_NAME "Gain"
-#define MASTER_ID "master"
-#define MASTER_NAME "Master"
+#define GAIN_ID "drive"
+#define GAIN_NAME "Drive"
+#define MASTER_ID "level"
+#define MASTER_NAME "Level"
 #define TONE_ID "tone"
 #define TONE_NAME "Tone"
 
