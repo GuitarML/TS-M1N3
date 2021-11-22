@@ -6,7 +6,7 @@ TS-M1N3 is a guitar plugin clone of the TS-9 Tubescreamer overdrive pedal. Machi
 
 ## Installing the plugin
 
-1. Download the appropriate plugin installer (Windows, Mac)
+1. Download the appropriate plugin installer [here](https://github.com/GuitarML/TS-M1N3/releases) (Windows, Mac)
 2. Run the installer and follow the instructions. May need to reboot to allow your DAW to recognize the new plugin.
 
 ## Info
@@ -14,7 +14,9 @@ TS-M1N3 is a guitar plugin clone of the TS-9 Tubescreamer overdrive pedal. Machi
 The [Automated-GuitarAmpModelling](https://github.com/Alec-Wright/Automated-GuitarAmpModelling) project was used to train the .json models.<br>
 GuitarML maintains a [fork](https://github.com/GuitarML/Automated-GuitarAmpModelling) with a few extra helpful features, including a Colab training script and wav file processing for conditioned parameters.
 
-The plugin uses [RTNeural](https://github.com/jatinchowdhury18/RTNeural), which is a highly optimized neural net inference engine intended for audio applications. 
+The plugin uses [RTNeural](https://github.com/jatinchowdhury18/RTNeural), which is a highly optimized neural net inference engine intended for audio applications.
+
+This plugin uses two json model files, one for 44.1kHz and one for 48kHz audio. The only difference is that the source training data is at the intended samplerate, 44.1kHz or 48kHz. Other samplerates can be used, but the sound may be distorted slightly.
 
 ## Build Instructions
 
