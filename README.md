@@ -28,8 +28,8 @@ For the training data, five steps for the gain and tone knobs were recorded (0.0
 
 ```bash
 # Clone the repository
-$ git clone https://github.com/GuitarML/TS-M1NE.git
-$ cd TS-M1NE
+$ git clone https://github.com/GuitarML/TS-M1N3.git
+$ cd TS-M1N3
 
 # initialize and set up submodules
 $ git submodule update --init --recursive
@@ -38,7 +38,7 @@ $ git submodule update --init --recursive
 $ cmake -Bbuild
 $ cmake --build build --config Release
 ```
-The binaries will be located in `TS-M1NE/build/TS-M1NE_artefacts/`
+The binaries will be located in `TS-M1N3/build/TS-M1N3_artefacts/`
 
 ### Build with Projucer 
 
@@ -46,15 +46,15 @@ The binaries will be located in `TS-M1NE/build/TS-M1NE_artefacts/`
 2. Download and install [JUCE](https://juce.com/) This project uses the "Projucer" application from the JUCE website. 
 3. Initialize and set up submodules
 ```git submodule update --init --recursive```
-4. Open the TS-M1NE.jucer file and in the appropriate Exporter Header Search Path field, enter the appropriate include paths from the modules folder.
+4. Open the TS-M1N3.jucer file and in the appropriate Exporter Header Search Path field, enter the appropriate include paths from the modules folder.
    For example:
 
 ```
-   <full-path-to>/TS-M1NE/modules/json/include
-   <full-path-to>/TS-M1NE/modules/RTNeural
-   <full-path-to>/TS-M1NE/modules/RTNeural/modules/xsimd/include
+   <full-path-to>/TS-M1N3/modules/json/include
+   <full-path-to>/TS-M1N3/modules/RTNeural
+   <full-path-to>/TS-M1N3/modules/RTNeural/modules/xsimd/include
 ```
-5. Build TS-M1NE from the Juce Projucer application. 
+5. Build TS-M1N3 from the Juce Projucer application. 
 
 Note: Make sure to build in Release mode unless actually debugging. Debug mode will not keep up with real time playing.
 
