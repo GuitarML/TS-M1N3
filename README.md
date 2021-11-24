@@ -57,3 +57,6 @@ The binaries will be located in `TS-M1NE/build/TS-M1NE_artefacts/`
 5. Build TS-M1NE from the Juce Projucer application. 
 
 Note: Make sure to build in Release mode unless actually debugging. Debug mode will not keep up with real time playing.
+
+### Special Thanks
+Special thanks to the UAH (University of Alabama in Huntsville) [MLAMSK](https://github.com/mlamsk) Senior Design Team, whose research and hard work directly impacted the development of this plugin.
