@@ -1,6 +1,6 @@
 # TS-M1N3
 
-![app](https://github.com/GuitarML/TS-M1NE/blob/main/resources/app.jpg)
+![app](https://github.com/GuitarML/TS-M1N3/blob/main/resources/app.jpg)
 
 TS-M1N3 is a guitar plugin clone of the TS-9 Tubescreamer overdrive pedal. Machine learning was used to train a model of both the drive and tone knobs for an accurate recreation of the pedal in all possible configurations. This plugin uses two conditioned parameters during model training to recreate the entire device using machine learning, as opposed to snapshot models at a particular setting. For best results, use prior to amp -> cabinet -> reverb effects to fully simulate playing an overdrive pedal through a physical amplifier. This can be done with the [NeuralPi](https://github.com/GuitarML/NeuralPi) plugin.
 
