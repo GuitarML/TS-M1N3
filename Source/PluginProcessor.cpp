@@ -30,8 +30,6 @@ TSM1N3AudioProcessor::TSM1N3AudioProcessor()
 
 #endif
 {
-    //loadConfig(BinaryData::model_ts9_cond2_json);
-    loadConfig();
 }
 
 
@@ -108,6 +106,16 @@ void TSM1N3AudioProcessor::prepareToPlay (double sampleRate, int samplesPerBlock
     // initialisation that you need..
     LSTM.reset();
 
+    // prepare resampler for target sample rate: 48 kHz
+    constexpr double targetSampleRate = 48000.0;
+    resampler.prepareWithTargetSampleRate ({ sampleRate, (uint32) samplesPerBlock, 1 }, targetSampleRate);
+
+    // load 48 kHz sample rate model
+    MemoryInputStream jsonInputStream(BinaryData::model_ts9_48k_cond2_json, BinaryData::model_ts9_48k_cond2_jsonSize, false);
+    nlohmann::json weights_json = nlohmann::json::parse(jsonInputStream.readEntireStreamAsString().toStdString());
+
+    LSTM.load_json3(weights_json);
+
     // set up DC blocker
     //dcBlocker.coefficients = dsp::IIR::Coefficients<float>::makeHighPass(sampleRate, 35.0f);
     //dsp::ProcessSpec spec{ sampleRate, static_cast<uint32> (samplesPerBlock), 2 };
@@ -151,21 +159,15 @@ void TSM1N3AudioProcessor::processBlock (AudioBuffer<float>& buffer, MidiBuffer&
 
     // Setup Audio Data
     const int numSamples = buffer.getNumSamples();
-    const int numInputChannels = getTotalNumInputChannels();
-    const int sampleRate = getSampleRate();
 
-    if (currentSampleRate != sampleRate) {
-        currentSampleRate = sampleRate;
-        loadConfig();
-    }
-    
-    //auto block = dsp::AudioBlock<float>(buffer).getSingleChannelBlock(0);
-    //auto context = juce::dsp::ProcessContextReplacing<float>(block);
+    // resample to target sample rate
+    auto block = dsp::AudioBlock<float> (buffer.getArrayOfWritePointers(), 1, numSamples);
+    auto block48k = resampler.processIn (block);
 
     // Amp =============================================================================
     if (fw_state == 1) {
         // Apply LSTM model
-        LSTM.process(buffer.getReadPointer(0), driveValue, toneValue, buffer.getWritePointer(0), numSamples);
+        LSTM.process(block48k.getChannelPointer(0), driveValue, toneValue, block48k.getChannelPointer(0), (int) block48k.getNumSamples());
       
         // Master Volume 
         // Apply ramped changes for gain smoothing
@@ -174,10 +176,13 @@ void TSM1N3AudioProcessor::processBlock (AudioBuffer<float>& buffer, MidiBuffer&
             buffer.applyGain(masterValue);
         }
         else {
-            buffer.applyGainRamp(0, buffer.getNumSamples(), previousMasterValue , masterValue);
+            buffer.applyGainRamp(0, (int) block48k.getNumSamples(), previousMasterValue , masterValue);
             previousMasterValue = masterValue;
         }
     }
+
+    // resample back to original sample rate
+    resampler.processOut (block48k, block);
 
     // process DC blocker
     //auto monoBlock = dsp::AudioBlock<float>(buffer).getSingleChannelBlock(0);
@@ -227,22 +232,6 @@ void TSM1N3AudioProcessor::setStateInformation (const void* data, int sizeInByte
                 editor->resetImages();
         }
     }
-}
-
-void TSM1N3AudioProcessor::loadConfig()
-{
-    nlohmann::json weights_json;
-    if (currentSampleRate >= 48000) {
-        MemoryInputStream jsonInputStream(BinaryData::model_ts9_48k_cond2_json, BinaryData::model_ts9_48k_cond2_jsonSize, false);
-        weights_json = nlohmann::json::parse(jsonInputStream.readEntireStreamAsString().toStdString());
-    } else {
-        MemoryInputStream jsonInputStream(BinaryData::model_ts9_cond2_json, BinaryData::model_ts9_cond2_jsonSize, false);
-        weights_json = nlohmann::json::parse(jsonInputStream.readEntireStreamAsString().toStdString());
-    }
-    
-    LSTM.load_json3(weights_json);
-
-    this->suspendProcessing(false);
 }
 
 /* // UNUSED but kept as a template for future plugins

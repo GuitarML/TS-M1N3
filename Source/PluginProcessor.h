@@ -72,8 +72,6 @@ public:
     void setTone(float paramTone);
     void setMaster(float db_ampMaster);
 
-    void loadConfig();
-
     // Pedal/amp states
     int fw_state = 1; // 0 = off, 1 = on
     float driveValue = 0.5;
@@ -87,9 +85,9 @@ public:
 
     AudioProcessorValueTreeState treeState;
 
-    int currentSampleRate = 44100;
-
 private:
+    chowdsp::ResampledProcess<chowdsp::ResamplingTypes::SRCResampler<>> resampler;
+
     //dsp::IIR::Filter<float> dcBlocker;  // Unused for TS-M1N3 plugin, leaving commented as template for future plugins
 
     //==============================================================================
