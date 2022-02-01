@@ -25,10 +25,13 @@ install_pluginval_win()
 # install
 if [[ "$OSTYPE" == "linux-gnu"* ]]; then
     pluginval=$(install_pluginval_linux)
-    plugin="build/TS-M1N3_artefacts/Release/VST3/TS-M1N3.vst3"
+    plugin="Plugin/build/TS-M1N3_artefacts/Release/VST3/TS-M1N3.vst3"
 elif [[ "$OSTYPE" == "darwin"* ]]; then
     pluginval=$(install_pluginval_mac)
-    plugin="build/TS-M1N3_artefacts/VST3/TS-M1N3.vst3"
+    plugin="Plugin/build/TS-M1N3_artefacts/VST3/TS-M1N3.vst3"
+else
+    pluginval=$(install_pluginval_win)
+    plugin="Plugin/build/TS-M1N3_artefacts/Release/VST3/TS-M1N3.vst3"
 fi
 
 echo "Pluginval installed at ${pluginval}"
