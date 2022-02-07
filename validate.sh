@@ -25,16 +25,26 @@ install_pluginval_win()
 # install
 if [[ "$OSTYPE" == "linux-gnu"* ]]; then
     pluginval=$(install_pluginval_linux)
-    plugin="build/TS-M1N3_artefacts/Release/VST3/TS-M1N3.vst3"
+    plugin="Plugin/build/TS-M1N3_artefacts/Release/VST3/TS-M1N3.vst3"
 elif [[ "$OSTYPE" == "darwin"* ]]; then
     pluginval=$(install_pluginval_mac)
-    plugin="build/TS-M1N3_artefacts/VST3/TS-M1N3.vst3"
+    plugin="Plugin/build/TS-M1N3_artefacts/VST3/TS-M1N3.vst3"
+else
+    pluginval=$(install_pluginval_win)
+    plugin="Plugin/build/TS-M1N3_artefacts/Release/VST3/TS-M1N3.vst3"
 fi
 
 echo "Pluginval installed at ${pluginval}"
 echo "Validating ${plugin}"
-$pluginval --strictness-level 8 --validate-in-process --validate $plugin --timeout-ms 600000
-result=$?
+
+n_tries=0
+result=1
+until [ "$n_tries" -ge 4 ] || [ "$result" -eq 0 ]
+do
+   $pluginval --strictness-level 8 --timeout-ms 90000 --validate-in-process --skip-gui-tests --validate $plugin
+   result=$?
+   n_tries=$((n_tries+1))
+done
 
 # clean up
 rm -Rf pluginval*
