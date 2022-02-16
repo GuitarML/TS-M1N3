@@ -114,5 +114,5 @@ if [[ "$*" = *deploy* ]]; then
     set +e
 
     ssh "smartguitarml@gmail.com" "rm -r ~/aax_builds/${TARGET_DIR}/TS-M1N3.aaxplugin"
-    scp -r "$aax_location" "smartguitarml@gmail.coms:~/aax_builds/${TARGET_DIR}/"
+    scp -r "$aax_location" "smartguitarml@gmail.com:~/aax_builds/${TARGET_DIR}/"
 fi
