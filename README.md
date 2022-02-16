@@ -49,13 +49,6 @@ The binaries will be located in `TS-M1N3/build/TS-M1N3_artefacts/`
 3. Initialize and set up submodules
 ```git submodule update --init --recursive```
 4. Open the TS-M1N3.jucer file and in the appropriate Exporter Header Search Path field, enter the appropriate include paths from the modules folder.
-   For example:
-
-```
-   <full-path-to>/TS-M1N3/modules/json/include
-   <full-path-to>/TS-M1N3/modules/RTNeural
-   <full-path-to>/TS-M1N3/modules/RTNeural/modules/xsimd/include
-```
 5. Build TS-M1N3 from the Juce Projucer application. 
 
 Note: Make sure to build in Release mode unless actually debugging. Debug mode will not keep up with real time playing.
