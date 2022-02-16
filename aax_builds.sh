@@ -39,7 +39,6 @@ sed_cmakelist()
 # set up OS-dependent variables
 if [[ "$OSTYPE" == "darwin"* ]]; then
     echo "Building for MAC"
-
     AAX_PATH=~/Developer/AAX_SDK/
     ilok_pass=$(more ~/Developer/ilok_pass)
     aax_target_dir="/Library/Application Support/Avid/Audio/Plug-Ins"
@@ -48,10 +47,8 @@ if [[ "$OSTYPE" == "darwin"* ]]; then
 
 else # Windows
     echo "Building for WINDOWS"
-
     AAX_PATH=C:/SDKs/AAX_SDK/
-    #ilok_pass=$(cat /d/ilok_pass)
-	ilok_pass=$(cat /c/SDKs/ilok_pass)
+    ilok_pass=$(cat /c/SDKs/ilok_pass)
     aax_target_dir="/c/Program Files/Common Files/Avid/Audio/Plug-Ins"
     TARGET_DIR="Win64"
 fi
