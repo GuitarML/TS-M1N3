@@ -69,7 +69,7 @@ if [[ "$OSTYPE" == "darwin"* ]]; then
         -DCMAKE_XCODE_ATTRIBUTE_OTHER_CODE_SIGN_FLAGS="--timestamp" \
         -DMACOS_RELEASE=ON
 
-    cmake --build build-aax --config $build_config -j12 --target TS-M1N3_AAX | xcpretty
+    cmake --build build-aax --config $build_config --target TS-M1N3_AAX | xcpretty
 
 else # Windows
     cmake -Bbuild-aax -G"Visual Studio 16 2019" -A x64
@@ -80,7 +80,7 @@ fi
 aax_location=build-aax/TS-M1N3_artefacts/$build_config/AAX/TS-M1N3.aaxplugin
 wcguid="" # Update
 if [[ "$OSTYPE" == "darwin"* ]]; then
-    wraptool sign --verbose \
+    /Applications/PACEAntiPiracy/Eden/Fusion/Current/bin/wraptool sign --verbose \
         --account keyth72 \
         --password "$ilok_pass" \
         --wcguid $wcguid \
@@ -89,7 +89,7 @@ if [[ "$OSTYPE" == "darwin"* ]]; then
         --in $aax_location \
         --out $aax_location
 
-    wraptool verify --verbose --in $aax_location
+        /Applications/PACEAntiPiracy/Eden/Fusion/Current/bin/wraptool verify --verbose --in $aax_location
 
 else # Windows
     wraptool sign --verbose \
