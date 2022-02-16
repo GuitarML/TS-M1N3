@@ -160,15 +160,20 @@ void TSM1N3AudioProcessor::processBlock (AudioBuffer<float>& buffer, MidiBuffer&
     // Setup Audio Data
     const int numSamples = buffer.getNumSamples();
 
-    // resample to target sample rate
-    auto block = dsp::AudioBlock<float> (buffer.getArrayOfWritePointers(), 1, numSamples);
-    auto block48k = resampler.processIn (block);
+
 
     // Amp =============================================================================
     if (fw_state == 1) {
+
+        // resample to target sample rate
+        auto block = dsp::AudioBlock<float>(buffer.getArrayOfWritePointers(), 1, numSamples);
+        auto block48k = resampler.processIn(block);
         // Apply LSTM model
         LSTM.process(block48k.getChannelPointer(0), driveValue, toneValue, block48k.getChannelPointer(0), (int) block48k.getNumSamples());
       
+        // resample back to original sample rate
+        resampler.processOut(block48k, block);
+
         // Master Volume 
         // Apply ramped changes for gain smoothing
         if (masterValue == previousMasterValue)
@@ -176,13 +181,10 @@ void TSM1N3AudioProcessor::processBlock (AudioBuffer<float>& buffer, MidiBuffer&
             buffer.applyGain(masterValue);
         }
         else {
-            buffer.applyGainRamp(0, (int) block48k.getNumSamples(), previousMasterValue , masterValue);
+            buffer.applyGainRamp(0, (int) buffer.getNumSamples(), previousMasterValue , masterValue);
             previousMasterValue = masterValue;
         }
     }
-
-    // resample back to original sample rate
-    resampler.processOut (block48k, block);
 
     // process DC blocker
     //auto monoBlock = dsp::AudioBlock<float>(buffer).getSingleChannelBlock(0);

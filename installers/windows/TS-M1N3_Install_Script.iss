@@ -23,13 +23,14 @@ Name: "VST3_64"; Description: "VST3 Plugin 64-bit"; Types: full
 Name: "VST3_32"; Description: "VST3 Plugin 32-bit"; Types: full
 Name: "STANDALONE_64"; Description: "Standalone 64-bit"; Types: full
 Name: "STANDALONE_32"; Description: "Standalone 32-bit"; Types: full
-; Name: "AAX"; Description: "AAX Plugin"; Types: full
+Name: "AAX"; Description: "AAX Plugin"; Types: full
 
 [Files]
 Source: "../../bin/Win64/TS-M1N3.vst3"; DestDir: "{code:GetDir|VST3_64}"; Components: VST3_64; Flags: ignoreversion recursesubdirs createallsubdirs
 Source: "../../bin/Win32/TS-M1N3.vst3"; DestDir: "{code:GetDir|VST3_32}"; Components: VST3_32; Flags: ignoreversion recursesubdirs createallsubdirs
 Source: "../../bin/Win64/TS-M1N3.exe"; DestDir: "{code:GetDir|STANDALONE_64}"; Components: STANDALONE_64; Flags: ignoreversion recursesubdirs createallsubdirs
 Source: "../../bin/Win32/TS-M1N3.exe"; DestDir: "{code:GetDir|STANDALONE_32}"; Components: STANDALONE_32; Flags: ignoreversion recursesubdirs createallsubdirs
+Source: "../../build-aax/TS-M1N3_artefacts/Release/AAX/TS-M1N3.aaxplugin"; DestDir: "{code:GetDir|AAX}"; Components: AAX; Flags: ignoreversion recursesubdirs createallsubdirs
 Source: "../../resources/TS-M1N3.ico"; Components: STANDALONE_64; DestDir: "{pf64}\GuitarML"
 Source: "../../resources/TS-M1N3.ico"; Components: STANDALONE_32; DestDir: "{pf32}\GuitarML"
 
