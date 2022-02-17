@@ -10,7 +10,7 @@ Check out a video demo on [Youtube](https://youtu.be/QVlmr_bECBE)
 
 ## Installing the plugin
 
-1. Download the appropriate plugin installer [here](https://github.com/GuitarML/TS-M1N3/releases) (Windows, Mac)
+1. Download the appropriate plugin installer [here](https://github.com/GuitarML/TS-M1N3/releases) (Windows, Mac, Linux)
 2. Run the installer and follow the instructions. May need to reboot to allow your DAW to recognize the new plugin.
 
 ## Info
