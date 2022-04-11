@@ -1,10 +1,6 @@
 #add_subdirectory(headless)
 
 target_sources(TS-M1N3 PRIVATE
-	myLookAndFeel.cpp
-	myLookAndFeel.h
-	PluginEditor.cpp
-	PluginEditor.h
 	PluginProcessor.cpp
 	PluginProcessor.h
 	RTNeuralLSTM.cpp

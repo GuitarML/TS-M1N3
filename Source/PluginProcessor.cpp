@@ -9,7 +9,7 @@
 */
 
 #include "PluginProcessor.h"
-#include "PluginEditor.h"
+
 #include <iostream>
 #include <fstream>
 
@@ -195,15 +195,19 @@ void TSM1N3AudioProcessor::processBlock (AudioBuffer<float>& buffer, MidiBuffer&
 }
 
 //==============================================================================
+
+#if !JUCE_AUDIOPROCESSOR_NO_GUI
 bool TSM1N3AudioProcessor::hasEditor() const
 {
     return true; // (change this to false if you choose to not supply an editor)
 }
 
+
 AudioProcessorEditor* TSM1N3AudioProcessor::createEditor()
 {
     return new TSM1N3AudioProcessorEditor (*this);
 }
+#endif
 
 //==============================================================================
 void TSM1N3AudioProcessor::getStateInformation (MemoryBlock& destData)
@@ -230,8 +234,10 @@ void TSM1N3AudioProcessor::setStateInformation (const void* data, int sizeInByte
         {
             treeState.replaceState (juce::ValueTree::fromXml (*xmlState));
 
+            #if !JUCE_AUDIOPROCESSOR_NO_GUI
             if (auto* editor = dynamic_cast<TSM1N3AudioProcessorEditor*> (getActiveEditor()))
                 editor->resetImages();
+            #endif
         }
     }
 }

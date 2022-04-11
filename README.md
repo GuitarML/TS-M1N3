@@ -1,5 +1,8 @@
 # TS-M1N3
 
+IMPORTANT: This is the MOD branch for TS-M1N3, which does not include GUI code or resources. 
+Because the mod toolchain uses gcc7, you will need to modify the json module to reference "experimental/filesystem" instead of just "filesystem".
+
 [![CI](https://github.com/GuitarML/TS-M1N3/actions/workflows/cmake.yml/badge.svg)](https://github.com/GuitarML/TS-M1N3/actions/workflows/cmake.yml) [![License: GPL v3](https://img.shields.io/badge/License-GPLv3-brightgreen.svg)](https://www.gnu.org/licenses/gpl-3.0) [![Downloads](https://img.shields.io/github/downloads/GuitarML/TS-M1N3/total)](https://somsubhra.github.io/github-release-stats/?username=GuitarML&repository=TS-M1N3&page=1&per_page=30)
 
 ![app](https://github.com/GuitarML/TS-M1N3/blob/main/resources/app.jpg)

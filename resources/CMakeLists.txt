@@ -1,11 +1,11 @@
 juce_add_binary_data(BinaryData SOURCES
-    footswitch_down.png
-    footswitch_up.png
-    knob2.png
-    led_red_off.png
-    led_red_on.png
+    #footswitch_down.png
+    #footswitch_up.png
+    #knob2.png
+    #led_red_off.png
+    #led_red_on.png
     logo.png
-    ts_background_black.jpg
+    #ts_background_black.jpg
     TS-M1N3.ico
     TS-M1N3.png
     ../models/model_ts9_48k_cond2.json
