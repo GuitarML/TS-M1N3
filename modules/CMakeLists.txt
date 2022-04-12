@@ -1,4 +1,4 @@
-add_subdirectory(JUCE)
+#add_subdirectory(JUCE)
 
 include(cmake/SubprojectVersion.cmake)
 subproject_version(JUCE juce_version)
