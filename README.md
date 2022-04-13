@@ -20,7 +20,9 @@ Note: References to the plugin editor have been removed, and gui resources remov
 2. Create the mod environment for building the plugin (can take about an hour to complete):
 ```
 cd mod-plugin-builder
-./bootstrap modduo-static juce  # Replace "modduox-static" with appropriate target as referenced in mod-plugin-builder Readme.
+./bootstrap modduo-static juce  
+
+# Replace "modduo-static" in above command with appropriate target as referenced in mod-plugin-builder Readme.
 ```
 Note: The "modduo-static" target uses the modduox build options but updated with GCC7.5 instead of GCC4.9. This is required to compile the TS-M1N3 code.
 
