@@ -1,58 +1,71 @@
 # TS-M1N3
 
+## MOD Branch
 IMPORTANT: This is the MOD branch for TS-M1N3, which does not include GUI code or resources. 
-Because the mod toolchain uses gcc7, you will need to modify the json module to reference "experimental/filesystem" instead of just "filesystem".
+Because the mod toolchain uses gcc7, you will need to modify the json module code to reference "experimental/filesystem" instead of just "filesystem", or else it won't compile.
 
-[![CI](https://github.com/GuitarML/TS-M1N3/actions/workflows/cmake.yml/badge.svg)](https://github.com/GuitarML/TS-M1N3/actions/workflows/cmake.yml) [![License: GPL v3](https://img.shields.io/badge/License-GPLv3-brightgreen.svg)](https://www.gnu.org/licenses/gpl-3.0) [![Downloads](https://img.shields.io/github/downloads/GuitarML/TS-M1N3/total)](https://somsubhra.github.io/github-release-stats/?username=GuitarML&repository=TS-M1N3&page=1&per_page=30)
+IMPORTANT: The instrctions used here are specific to MOPEP (Patchbox OS) running on a Raspberry Pi3, and testing using [Pi-Stomp](https://github.com/TreeFallSound/pi-stomp) hardware.
 
-![app](https://github.com/GuitarML/TS-M1N3/blob/main/resources/app.jpg)
+Required additional modifications after cloning TS-M1N3 repo and updating submodules:
+1. Remove the JUCE module so that cmake can find the MOD toolchain version of JUCE. 
+2. Update json module code to reference "experimental/filesystem" instead of just "filesystem". There are several locations in the c++ code that this must be done.
 
-TS-M1N3 is a guitar plugin clone of the TS-9 Tubescreamer overdrive pedal. Machine learning was used to train a model of both the drive and tone knobs for an accurate recreation of the pedal in all possible configurations. This plugin uses two conditioned parameters during model training to recreate the entire device using machine learning, as opposed to snapshot models at a particular setting. For best results, use prior to amp -> cabinet -> reverb effects to fully simulate playing an overdrive pedal through a physical amplifier. This can be done with the [NeuralPi](https://github.com/GuitarML/NeuralPi) plugin.
+Note: The internal samplerate conversion code for the neural net model has been removed since MOD devices use a fixed samplerate of 48kHz. 
+Note: References to the plugin editor have been removed, and gui resources removed from the cmake files. This is required to compile for MOD.
 
-Check out a video demo on [Youtube](https://youtu.be/QVlmr_bECBE)
-
-## Installing the plugin
-
-1. Download the appropriate plugin installer [here](https://github.com/GuitarML/TS-M1N3/releases) (Windows, Mac, Linux)
-2. Run the installer and follow the instructions. May need to reboot to allow your DAW to recognize the new plugin.
-
-## Info
-
-The [Automated-GuitarAmpModelling](https://github.com/Alec-Wright/Automated-GuitarAmpModelling) project was used to train the .json models.<br>
-GuitarML maintains a [fork](https://github.com/GuitarML/Automated-GuitarAmpModelling) with a few extra helpful features, including a Colab training script and wav file processing for conditioned parameters.
-
-The plugin uses [RTNeural](https://github.com/jatinchowdhury18/RTNeural), which is a highly optimized neural net inference engine intended for audio applications.
-
-For the training data, five steps for the gain and tone knobs were recorded (0.0, 0.25, 0.50, 0.75, 1.0), for a total of 25 output samples at 2 minutes each. An LSTM layer with a hidden size of 20 was used.
-
-## Build Instructions
-
-### Build with Cmake
-
-```bash
-# Clone the repository
-$ git clone https://github.com/GuitarML/TS-M1N3.git
-$ cd TS-M1N3
-
-# initialize and set up submodules
-$ git submodule update --init --recursive
-
-# build with CMake
-$ cmake -Bbuild
-$ cmake --build build --config Release
+### To compile LV2 for Mod devices / Rasberry Pi based devices (ARM architecture):
+1. Clone the latest [mod-plugin-builder](https://github.com/moddevices/mod-plugin-builder)
+2. Create the mod environment for building the plugin (can take about an hour to complete):
 ```
-The binaries will be located in `TS-M1N3/build/TS-M1N3_artefacts/`
+cd mod-plugin-builder
+./bootstrap modduo-static juce  # Replace "modduox-static" with appropriate target as referenced in mod-plugin-builder Readme.
+```
+# Note: The "modduo-static" target uses the modduox build options but updated with GCC7.5 instead of GCC4.9. This is required to compile the TS-M1N3 code.
+3. Modify the modduo-static ".config" file for Raspberry Pi3 with optimizations:
+```
+# In ~/mod-workdir/modduo-static/.config
+# Modify the .config file with these values at the proper location (search for BR2_TARGET_OPTIMIZATION:
 
-### Build with Projucer 
+BR2_TARGET_OPTIMIZATION="-mcpu=cortex-a53 -mtune=cortex-a53 -mfpu=neon-fp-armv8 -mfloat-abi=hard -mvectorize-with-neon-quad -ffast-math -fno-finite-math-only -fprefetch-loop-arrays -funroll-loops -funsafe-loop-optimizations -D__MOD_DEVICES__ -D_MOD_DEVICE_DUO -static-libstdc++ -Wl,-Ofast -Wl,--as-needed -Wl,--strip-all"
+BR2_TARGET_LDFLAGS="-static-libstdc++ -Wl,-Ofast -Wl,--as-needed -Wl,--strip-all"
+```
+Note: The modified flags will be ```-mcpu, -mtune, -mfpu, and -O```. This is done to target the Rpi3 specific architecture and optimize for SIMD instructions. 
 
-1. Clone or download this repository.
-2. Download and install [JUCE](https://juce.com/) This project uses the "Projucer" application from the JUCE website. 
-3. Initialize and set up submodules
-```git submodule update --init --recursive```
-4. Open the TS-M1N3.jucer file and in the appropriate Exporter Header Search Path field, enter the appropriate include paths from the modules folder.
-5. Build TS-M1N3 from the Juce Projucer application. 
+4. After the above step finishes, in the ```mod-plugin-builder``` directory, run the following to import the mod toolchain:
+```. local.env modduox-static```
+5. In the same terminal as step 3, cd into the mod branch of the TS-M1N3 repo and run these commands to build (after making required modifications mentioned above):
+```
+cmake -Bbuild {JUCE_TOOLCHAIN_FILE} -DCMAKE_BUILD_TYPE=Release
+cmake --build build --config Release
+```
+If all goes well, you should have a LV2 folder with a compiled .so. 
+6. To generate the TTL files, compile and run the lv2-ttl-generator tool and run
+```
+./lv2-ttl-generator <path-to-lv2-so>
+```
+Note: Since the LV2 is for ARM architecture, the lv2-ttl-generator must be compiled and run using ARM as the target
+Note: lv2-ttl-generator code is located in the [DPF repo](https://github.com/DISTRHO/DPF/tree/main/utils/lv2-ttl-generator)
+Note: The method I used was to scp the DPF repo onto the Raspberry Pi 3, and the use "make" to build the lv2-ttl-generator in the local environment. 
+      I then used scp to copy the TS-M1N3.lv2 onto the Raspberry Pi 3, and ran ./lv2-ttl-generator TS-M1N3.lv2/TS-M1N3.so to generate the ttl files. The ttl files will
+      be generated in the same directory as the tool, so you have to move these into the TS-M1N3.lv2 directory.
+      I then scp'd the TS-M1N3.lv2 onto my Windows machine to use the MOD-SDK to generate the html GUI.
 
-Note: Make sure to build in Release mode unless actually debugging. Debug mode will not keep up with real time playing.
+7. With your completed LV2 plugin package, follow the instructions on the MOD-SDK wiki for creating an html gui for use in the virtual pedalboard.
+[MOD-SDK wiki](https://wiki.moddevices.com/wiki/MOD_SDK)
 
-### Special Thanks
-Special thanks to the UAH (University of Alabama in Huntsville) [MLAMSK](https://github.com/mlamsk) Senior Design Team, whose research and hard work directly impacted the development of this plugin.
+8. After the html gui files have been created for your LV2, deploy the finalized LV2 to your device. If you have an official MOD device, you can deploy using the MOD-SDK (MOD-SDK deploy does not work for MODEP/PatchboxOS).
+This procedure can be done for modep devices such as the Pi-Stomp (patchbox OS):
+    A. Turn on your device.
+    B. Run these steps (or similar) to get your lv2 package to your device at the proper location.
+```
+scp -r TS-M1N3.lv2 patch@patchbox.local:/home/patch/
+ssh patch@pathcbox.local
+sudo cp -r /home/patch/TS-M1N3.lv2 /usr/modep/lv2/
+```
+    C. Restart your device.
+
+9. If all goes well, you should be able to use the virtual pedalboard to drag and drop the TS-M1N3 into your pedalboard. CPU usage was noted at 33% during testing (that's alot), it's a work-in-progress to optimize further. 
+
+Note: For more information, see these MOD wiki pages:
+https://wiki.moddevices.com/wiki/How_To_Build_and_Deploy_LV2_Plugin_to_MOD_Duo
+https://wiki.moddevices.com/wiki/Developers
