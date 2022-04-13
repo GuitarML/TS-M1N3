@@ -213,9 +213,11 @@ void TSM1N3AudioProcessor::getStateInformation (MemoryBlock& destData)
     // You could do that either as raw data, or use the XML or ValueTree classes
     // as intermediaries to make it easy to save and load complex data.
 
-    auto state = treeState.copyState();
-    std::unique_ptr<XmlElement> xml (state.createXml());
-    copyXmlToBinary (*xml, destData);
+    MemoryOutputStream stream(destData, true);
+
+    stream.writeFloat(*gainParam);
+    stream.writeFloat(*masterParam);
+    stream.writeFloat(*toneParam);
 }
 
 void TSM1N3AudioProcessor::setStateInformation (const void* data, int sizeInBytes)
@@ -223,20 +225,11 @@ void TSM1N3AudioProcessor::setStateInformation (const void* data, int sizeInByte
     // You should use this method to restore your parameters from this memory block,
     // whose contents will have been created by the getStateInformation() call.
 
-    std::unique_ptr<juce::XmlElement> xmlState (getXmlFromBinary (data, sizeInBytes));
+    MemoryInputStream stream(data, static_cast<size_t> (sizeInBytes), false);
 
-    if (xmlState.get() != nullptr)
-    {
-        if (xmlState->hasTagName (treeState.state.getType()))
-        {
-            treeState.replaceState (juce::ValueTree::fromXml (*xmlState));
-
-            #if !JUCE_AUDIOPROCESSOR_NO_GUI
-            if (auto* editor = dynamic_cast<TSM1N3AudioProcessorEditor*> (getActiveEditor()))
-                editor->resetImages();
-            #endif
-        }
-    }
+    gainParam->setValueNotifyingHost(stream.readFloat());
+    masterParam->setValueNotifyingHost(stream.readFloat());
+    toneParam->setValueNotifyingHost(stream.readFloat());
 }
 
 
