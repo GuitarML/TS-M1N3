@@ -24,7 +24,7 @@ cd mod-plugin-builder
 
 # Replace "modduo-static" in above command with appropriate target as referenced in mod-plugin-builder Readme.
 ```
-Note: The "modduo-static" target uses the modduox build options but updated with GCC7.5 instead of GCC4.9. This is required to compile the TS-M1N3 code.
+Note: The "modduo-static" target uses the modduo build options but updated with GCC7.5 instead of GCC4.9. This is required to compile the TS-M1N3 code.
 
 3. Modify the modduo-static ".config" file for Raspberry Pi3 with optimizations:
 ```
