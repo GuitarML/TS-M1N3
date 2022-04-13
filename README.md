@@ -4,7 +4,9 @@
 IMPORTANT: This is the MOD branch for TS-M1N3, which does not include GUI code or resources. 
 Because the mod toolchain uses gcc7, you will need to modify the json module code to reference "experimental/filesystem" instead of just "filesystem", or else it won't compile.
 
-IMPORTANT: The instrctions used here are specific to MOPEP (Patchbox OS) running on a Raspberry Pi3, and testing using [Pi-Stomp](https://github.com/TreeFallSound/pi-stomp) hardware.
+IMPORTANT: The instrctions used here are specific to MOPEP (Patchbox OS) running on a Raspberry Pi3, and testing using [Pi-Stomp](https://github.com/TreeFallSound/pi-stomp) hardware. You will need to modify your build environment to match your target system in steps 2 and 3 below.
+
+Note: This is a prototype build process. Hoping to simplify this in the future. 
 
 Required additional modifications after cloning TS-M1N3 repo and updating submodules:
 1. Remove the JUCE module so that cmake can find the MOD toolchain version of JUCE. 
