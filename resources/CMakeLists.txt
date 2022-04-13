@@ -4,12 +4,12 @@ juce_add_binary_data(BinaryData SOURCES
     #knob2.png
     #led_red_off.png
     #led_red_on.png
-    logo.png
+    #logo.png
     #ts_background_black.jpg
-    TS-M1N3.ico
-    TS-M1N3.png
+    #TS-M1N3.ico
+    #TS-M1N3.png
     ../models/model_ts9_48k_cond2.json
-    ../models/model_ts9_cond2.json
+    #../models/model_ts9_cond2.json
 )
 
 # Need to build BinaryData with -fPIC flag on Linux
