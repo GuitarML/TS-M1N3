@@ -58,10 +58,10 @@ Note: The method I used was to scp the DPF repo onto the Raspberry Pi 3, and the
 7. With your completed LV2 plugin package, follow the instructions on the MOD-SDK wiki for creating an html gui for use in the virtual pedalboard.
 [MOD-SDK wiki](https://wiki.moddevices.com/wiki/MOD_SDK)
 
-8. After the html gui files have been created for your LV2, deploy the finalized LV2 to your device. If you have an official MOD device, you can deploy using the MOD-SDK (MOD-SDK deploy does not work for MODEP/PatchboxOS).
-This procedure can be done for modep devices such as the Pi-Stomp (patchbox OS):
-    A. Turn on your device.
-    B. Run these steps (or similar) to get your lv2 package to your device at the proper location.
+8. After the html gui files have been created for your LV2, deploy the finalized LV2 to your device. If you have an official MOD device, you can deploy using the MOD-SDK (MOD-SDK deploy does not work for MODEP/PatchboxOS).<br>
+This procedure can be done for modep devices such as the Pi-Stomp (patchbox OS):<br>
+    A. Turn on your device.<br>
+    B. Run these steps (or similar) to get your lv2 package to your device at the proper location.<br>
 ```
 scp -r TS-M1N3.lv2 patch@patchbox.local:/home/patch/
 ssh patch@pathcbox.local
