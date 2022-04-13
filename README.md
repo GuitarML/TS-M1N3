@@ -37,7 +37,7 @@ BR2_TARGET_LDFLAGS="-static-libstdc++ -Wl,-Ofast -Wl,--as-needed -Wl,--strip-all
 Note: The modified flags will be ```-mcpu, -mtune, -mfpu, and -O```. This is done to target the Rpi3 specific architecture and optimize for SIMD instructions. 
 
 4. After the above step finishes, in the ```mod-plugin-builder``` directory, run the following to import the mod toolchain:
-```. local.env modduox-static```
+```. local.env modduo-static```
 5. In the same terminal as step 3, cd into the mod branch of the TS-M1N3 repo and run these commands to build (after making required modifications mentioned above):
 ```
 cmake -Bbuild {JUCE_TOOLCHAIN_FILE} -DCMAKE_BUILD_TYPE=Release
