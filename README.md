@@ -15,14 +15,15 @@ Required additional modifications after cloning TS-M1N3 repo and updating submod
 Note: The internal samplerate conversion code for the neural net model has been removed since MOD devices use a fixed samplerate of 48kHz. 
 Note: References to the plugin editor have been removed, and gui resources removed from the cmake files. This is required to compile for MOD.
 
-### To compile LV2 for Mod devices / Rasberry Pi based devices (ARM architecture):
+## To compile LV2 for Mod devices / Rasberry Pi based devices (ARM architecture):
 1. Clone the latest [mod-plugin-builder](https://github.com/moddevices/mod-plugin-builder)
 2. Create the mod environment for building the plugin (can take about an hour to complete):
 ```
 cd mod-plugin-builder
 ./bootstrap modduo-static juce  # Replace "modduox-static" with appropriate target as referenced in mod-plugin-builder Readme.
 ```
-# Note: The "modduo-static" target uses the modduox build options but updated with GCC7.5 instead of GCC4.9. This is required to compile the TS-M1N3 code.
+Note: The "modduo-static" target uses the modduox build options but updated with GCC7.5 instead of GCC4.9. This is required to compile the TS-M1N3 code.
+
 3. Modify the modduo-static ".config" file for Raspberry Pi3 with optimizations:
 ```
 # In ~/mod-workdir/modduo-static/.config
