@@ -48,8 +48,8 @@ If all goes well, you should have a LV2 folder with a compiled .so.
 ```
 ./lv2-ttl-generator <path-to-lv2-so>
 ```
-Note: Since the LV2 is for ARM architecture, the lv2-ttl-generator must be compiled and run using ARM as the target
-Note: lv2-ttl-generator code is located in the [DPF repo](https://github.com/DISTRHO/DPF/tree/main/utils/lv2-ttl-generator)
+Note: Since the LV2 is for ARM architecture, the lv2-ttl-generator must be compiled and run using ARM as the target<br>
+Note: lv2-ttl-generator code is located in the [DPF repo](https://github.com/DISTRHO/DPF/tree/main/utils/lv2-ttl-generator)<br>
 Note: The method I used was to scp the DPF repo onto the Raspberry Pi 3, and the use "make" to build the lv2-ttl-generator in the local environment. 
       I then used scp to copy the TS-M1N3.lv2 onto the Raspberry Pi 3, and ran ./lv2-ttl-generator TS-M1N3.lv2/TS-M1N3.so to generate the ttl files. The ttl files will
       be generated in the same directory as the tool, so you have to move these into the TS-M1N3.lv2 directory.
