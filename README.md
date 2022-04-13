@@ -15,7 +15,7 @@ Required additional modifications after cloning TS-M1N3 repo and updating submod
 Note: The internal samplerate conversion code for the neural net model has been removed since MOD devices use a fixed samplerate of 48kHz. 
 Note: References to the plugin editor have been removed, and gui resources removed from the cmake files. This is required to compile for MOD.
 
-## To compile LV2 for Mod devices / Rasberry Pi based devices (ARM architecture):
+## To compile LV2 for MODEP devices / Raspberry Pi 3 based devices (32 bit ARM architecture):
 1. Clone the latest [mod-plugin-builder](https://github.com/moddevices/mod-plugin-builder)
 2. Create the mod environment for building the plugin (can take about an hour to complete):
 ```
