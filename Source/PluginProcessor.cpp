@@ -23,13 +23,17 @@ TSM1N3AudioProcessor::TSM1N3AudioProcessor()
 #endif
         .withOutput("Output", AudioChannelSet::stereo(), true)
 #endif
-    ),    
-    treeState(*this, nullptr, "PARAMETER", { std::make_unique<AudioParameterFloat>(GAIN_ID, GAIN_NAME, NormalisableRange<float>(0.0f, 1.0f, 0.01f), 0.5f),
-                        std::make_unique<AudioParameterFloat>(TONE_ID, TONE_NAME, NormalisableRange<float>(0.0f, 1.0f, 0.01f), 0.5f),
-                        std::make_unique<AudioParameterFloat>(MASTER_ID, MASTER_NAME, NormalisableRange<float>(0.0f, 1.0f, 0.01f), 0.5) })
+    )  
+    //treeState(*this, nullptr, "PARAMETER", { std::make_unique<AudioParameterFloat>(GAIN_ID, GAIN_NAME, NormalisableRange<float>(0.0f, 1.0f, 0.01f), 0.5f),
+    //                    std::make_unique<AudioParameterFloat>(TONE_ID, TONE_NAME, NormalisableRange<float>(0.0f, 1.0f, 0.01f), 0.5f),
+    //                    std::make_unique<AudioParameterFloat>(MASTER_ID, MASTER_NAME, NormalisableRange<float>(0.0f, 1.0f, 0.01f), 0.5) })
 
 #endif
 {
+    // initialize parameters:
+    addParameter(gainParam = new AudioParameterFloat(GAIN_ID, GAIN_NAME, NormalisableRange<float>(0.0f, 1.0f, 0.01f), 0.5f));
+    addParameter(toneParam = new AudioParameterFloat(TONE_ID, TONE_NAME, NormalisableRange<float>(0.0f, 1.0f, 0.01f), 0.5f));
+    addParameter(masterParam = new AudioParameterFloat(MASTER_ID, MASTER_NAME, NormalisableRange<float>(0.0f, 1.0f, 0.01f), 0.5f));
 }
 
 
@@ -106,10 +110,6 @@ void TSM1N3AudioProcessor::prepareToPlay (double sampleRate, int samplesPerBlock
     // initialisation that you need..
     LSTM.reset();
 
-    // prepare resampler for target sample rate: 48 kHz
-    constexpr double targetSampleRate = 48000.0;
-    resampler.prepareWithTargetSampleRate ({ sampleRate, (uint32) samplesPerBlock, 1 }, targetSampleRate);
-
     // load 48 kHz sample rate model
     MemoryInputStream jsonInputStream(BinaryData::model_ts9_48k_cond2_json, BinaryData::model_ts9_48k_cond2_jsonSize, false);
     nlohmann::json weights_json = nlohmann::json::parse(jsonInputStream.readEntireStreamAsString().toStdString());
@@ -160,29 +160,26 @@ void TSM1N3AudioProcessor::processBlock (AudioBuffer<float>& buffer, MidiBuffer&
     // Setup Audio Data
     const int numSamples = buffer.getNumSamples();
 
-
-
     // Amp =============================================================================
     if (fw_state == 1) {
+        auto gain = static_cast<float> (gainParam->get());
+        auto tone = static_cast<float> (toneParam->get());
+        auto master = static_cast<float> (masterParam->get());
 
-        // resample to target sample rate
         auto block = dsp::AudioBlock<float>(buffer.getArrayOfWritePointers(), 1, numSamples);
-        auto block48k = resampler.processIn(block);
+
         // Apply LSTM model
-        LSTM.process(block48k.getChannelPointer(0), driveValue, toneValue, block48k.getChannelPointer(0), (int) block48k.getNumSamples());
-      
-        // resample back to original sample rate
-        resampler.processOut(block48k, block);
+        LSTM.process(block.getChannelPointer(0), gain, tone, block.getChannelPointer(0), (int) block.getNumSamples());
 
         // Master Volume 
         // Apply ramped changes for gain smoothing
-        if (masterValue == previousMasterValue)
+        if (master == previousMasterValue)
         {
-            buffer.applyGain(masterValue);
+            buffer.applyGain(master);
         }
         else {
-            buffer.applyGainRamp(0, (int) buffer.getNumSamples(), previousMasterValue , masterValue);
-            previousMasterValue = masterValue;
+            buffer.applyGainRamp(0, (int) buffer.getNumSamples(), previousMasterValue , master);
+            previousMasterValue = master;
         }
     }
 
@@ -242,35 +239,6 @@ void TSM1N3AudioProcessor::setStateInformation (const void* data, int sizeInByte
     }
 }
 
-/* // UNUSED but kept as a template for future plugins
-float TSM1N3AudioProcessor::convertLogScale(float in_value, float x_min, float x_max, float y_min, float y_max)
-{
-    float b = log(y_max / y_min) / (x_max - x_min);
-    float a = y_max / exp(b * x_max);
-    float converted_value = a * exp(b * in_value);
-    return converted_value;
-}
-*/
-
-float TSM1N3AudioProcessor::decibelToLinear(float dbValue)
-{
-    return powf(10.0, dbValue/20.0);
-}
-
-void TSM1N3AudioProcessor::setDrive(float paramDrive)
-{
-    driveValue = paramDrive;
-}
-
-void TSM1N3AudioProcessor::setTone(float paramTone)
-{
-    toneValue = paramTone;
-}
-
-void TSM1N3AudioProcessor::setMaster(float db_ampMaster)
-{
-    masterValue = db_ampMaster;
-}
 
 
 //==============================================================================
