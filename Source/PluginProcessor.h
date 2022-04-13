@@ -75,19 +75,22 @@ public:
 
     // Pedal/amp states
     int fw_state = 1; // 0 = off, 1 = on
-    float driveValue = 0.5;
-    float toneValue = 0.5;
-    float masterValue = 0.5;
+    //float driveValue = 0.5;
+    //float toneValue = 0.5;
+    //float masterValue = 0.5;
     float previousMasterValue = 0.5;
 
     bool lstm_state = true;;
 
     RT_LSTM LSTM;
 
-    AudioProcessorValueTreeState treeState;
+    //AudioProcessorValueTreeState treeState;
 
 private:
-    chowdsp::ResampledProcess<chowdsp::ResamplingTypes::SRCResampler<>> resampler;
+
+    AudioParameterFloat* gainParam;
+    AudioParameterFloat* toneParam;
+    AudioParameterFloat* masterParam;
 
     //dsp::IIR::Filter<float> dcBlocker;  // Unused for TS-M1N3 plugin, leaving commented as template for future plugins
 
