@@ -29,7 +29,7 @@ Note: The "modduo-static" target uses the modduo build options but updated with 
 3. Modify the modduo-static ".config" file for Raspberry Pi3 with optimizations:
 ```
 # In ~/mod-workdir/modduo-static/.config
-# Modify the .config file with these values at the proper location (search for BR2_TARGET_OPTIMIZATION:
+# Modify the .config file with these values at the proper location (search for BR2_TARGET_OPTIMIZATION):
 
 BR2_TARGET_OPTIMIZATION="-mcpu=cortex-a53 -mtune=cortex-a53 -mfpu=neon-fp-armv8 -mfloat-abi=hard -mvectorize-with-neon-quad -ffast-math -fno-finite-math-only -fprefetch-loop-arrays -funroll-loops -funsafe-loop-optimizations -D__MOD_DEVICES__ -D_MOD_DEVICE_DUO -static-libstdc++ -Wl,-Ofast -Wl,--as-needed -Wl,--strip-all"
 BR2_TARGET_LDFLAGS="-static-libstdc++ -Wl,-Ofast -Wl,--as-needed -Wl,--strip-all"
