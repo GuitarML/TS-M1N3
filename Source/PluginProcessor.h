@@ -67,12 +67,6 @@ public:
     
     //float convertLogScale(float in_value, float x_min, float x_max, float y_min, float y_max);
 
-    float decibelToLinear(float dbValue);
-
-    void setDrive(float paramDrive);
-    void setTone(float paramTone);
-    void setMaster(float db_ampMaster);
-
     // Pedal/amp states
     int fw_state = 1; // 0 = off, 1 = on
     //float driveValue = 0.5;
