@@ -43,7 +43,7 @@ Note: The modified flags will be ```-mcpu, -mtune, -mfpu, and -O```. This is don
 cmake -Bbuild {JUCE_TOOLCHAIN_FILE} -DCMAKE_BUILD_TYPE=Release
 cmake --build build --config Release
 ```
-If all goes well, you should have a LV2 folder with a compiled .so. 
+If all goes well, you should have a LV2 folder with a compiled .so. <br>
 6. To generate the TTL files, compile and run the lv2-ttl-generator tool and run
 ```
 ./lv2-ttl-generator <path-to-lv2-so>
