@@ -40,7 +40,7 @@ Note: The modified flags will be ```-mcpu, -mtune, -mfpu, and -O```. This is don
 ```. local.env modduo-static```
 5. In the same terminal as step 3, cd into the mod branch of the TS-M1N3 repo and run these commands to build (after making required modifications mentioned above):
 ```
-cmake -Bbuild {JUCE_TOOLCHAIN_FILE} -DCMAKE_BUILD_TYPE=Release
+cmake -Bbuild -DCMAKE_TOOLCHAIN_FILE=${JUCE_TOOLCHAIN_FILE} -DCMAKE_BUILD_TYPE=Release
 cmake --build build --config Release
 ```
 If all goes well, you should have a LV2 folder with a compiled .so. <br>
