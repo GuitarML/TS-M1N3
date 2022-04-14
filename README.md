@@ -38,7 +38,7 @@ Note: The modified flags will be ```-mcpu, -mtune, -mfpu, and -O```. This is don
 
 4. After the above step finishes, in the ```mod-plugin-builder``` directory, run the following to import the mod toolchain:
 ```. local.env modduo-static```
-5. In the same terminal as step 3, cd into the mod branch of the TS-M1N3 repo and run these commands to build (after making required modifications mentioned above):
+5. In the same terminal as step 4, cd into the mod branch of the TS-M1N3 repo and run these commands to build (after making required modifications mentioned above):
 ```
 cmake -Bbuild -DCMAKE_TOOLCHAIN_FILE=${JUCE_TOOLCHAIN_FILE} -DCMAKE_BUILD_TYPE=Release
 cmake --build build --config Release
