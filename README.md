@@ -70,7 +70,7 @@ sudo cp -r /home/patch/TS-M1N3.lv2 /usr/modep/lv2/
 
    C. Restart your device.
 
-9. If all goes well, you should be able to use the virtual pedalboard to drag and drop the TS-M1N3 into your pedalboard. CPU usage was noted at 33% during testing (that's alot), it's a work-in-progress to optimize further. 
+9. If all goes well, you should be able to use the virtual pedalboard to drag and drop the TS-M1N3 into your pedalboard. CPU usage was noted at 24% during testing (that's alot), it's a work-in-progress to optimize further. 
 
 Note: For more information, see these MOD wiki pages:
 https://wiki.moddevices.com/wiki/How_To_Build_and_Deploy_LV2_Plugin_to_MOD_Duo
