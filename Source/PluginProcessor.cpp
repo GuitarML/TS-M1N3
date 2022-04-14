@@ -19,9 +19,9 @@ TSM1N3AudioProcessor::TSM1N3AudioProcessor()
     : AudioProcessor(BusesProperties()
 #if ! JucePlugin_IsMidiEffect
 #if ! JucePlugin_IsSynth
-        .withInput("Input", AudioChannelSet::stereo(), true)
+        .withInput("Input", AudioChannelSet::mono(), true)
 #endif
-        .withOutput("Output", AudioChannelSet::stereo(), true)
+        .withOutput("Output", AudioChannelSet::mono(), true)
 #endif
     )  
     //treeState(*this, nullptr, "PARAMETER", { std::make_unique<AudioParameterFloat>(GAIN_ID, GAIN_NAME, NormalisableRange<float>(0.0f, 1.0f, 0.01f), 0.5f),
@@ -137,8 +137,7 @@ bool TSM1N3AudioProcessor::isBusesLayoutSupported (const BusesLayout& layouts) c
   #else
     // This is the place where you check if the layout is supported.
     // In this template code we only support mono or stereo.
-    if (layouts.getMainOutputChannelSet() != AudioChannelSet::mono()
-     && layouts.getMainOutputChannelSet() != AudioChannelSet::stereo())
+    if (layouts.getMainOutputChannelSet() != AudioChannelSet::mono())
         return false;
 
     // This checks if the input layout matches the output layout
@@ -183,12 +182,6 @@ void TSM1N3AudioProcessor::processBlock (AudioBuffer<float>& buffer, MidiBuffer&
         }
     }
 
-    // process DC blocker
-    //auto monoBlock = dsp::AudioBlock<float>(buffer).getSingleChannelBlock(0);
-    //dcBlocker.process(dsp::ProcessContextReplacing<float>(monoBlock));
-    
-    for (int ch = 1; ch < buffer.getNumChannels(); ++ch)
-        buffer.copyFrom(ch, 0, buffer, 0, 0, buffer.getNumSamples());
 }
 
 //==============================================================================
