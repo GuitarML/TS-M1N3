@@ -26,8 +26,8 @@ public:
 
 private:
     RTNeural::ModelT<float, 3, 1,
-        RTNeural::LSTMLayerT<float, 3, 20>,
-        RTNeural::DenseT<float, 20, 1>> model_cond2;
+        RTNeural::LSTMLayerT<float, 3, 14>,
+        RTNeural::DenseT<float, 14, 1>> model_cond2;
 
     float inArray alignas(16)[3] = { 0.0, 0.0, 0.0 };
     //float inArray[2] = { 0.0, 0.0, 0.0 };
