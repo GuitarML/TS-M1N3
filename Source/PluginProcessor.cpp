@@ -30,6 +30,9 @@ TSM1N3AudioProcessor::TSM1N3AudioProcessor()
 
 #endif
 {
+    driveParam = treeState.getRawParameterValue (GAIN_ID);
+    masterParam = treeState.getRawParameterValue (MASTER_ID);
+    toneParam = treeState.getRawParameterValue (TONE_ID);
 }
 
 
@@ -105,16 +108,18 @@ void TSM1N3AudioProcessor::prepareToPlay (double sampleRate, int samplesPerBlock
     // Use this method as the place to do any pre-playback
     // initialisation that you need..
     LSTM.reset();
+    LSTM2.reset();
 
     // prepare resampler for target sample rate: 48 kHz
     constexpr double targetSampleRate = 48000.0;
-    resampler.prepareWithTargetSampleRate ({ sampleRate, (uint32) samplesPerBlock, 1 }, targetSampleRate);
+    resampler.prepareWithTargetSampleRate ({ sampleRate, (uint32) samplesPerBlock, 2 }, targetSampleRate);
 
     // load 48 kHz sample rate model
     MemoryInputStream jsonInputStream(BinaryData::model_ts9_48k_cond2_json, BinaryData::model_ts9_48k_cond2_jsonSize, false);
     nlohmann::json weights_json = nlohmann::json::parse(jsonInputStream.readEntireStreamAsString().toStdString());
 
     LSTM.load_json3(weights_json);
+    LSTM2.load_json3(weights_json);
 
     // set up DC blocker
     //dcBlocker.coefficients = dsp::IIR::Coefficients<float>::makeHighPass(sampleRate, 35.0f);
@@ -160,17 +165,30 @@ void TSM1N3AudioProcessor::processBlock (AudioBuffer<float>& buffer, MidiBuffer&
     // Setup Audio Data
     const int numSamples = buffer.getNumSamples();
 
-
+    auto driveValue = static_cast<float> (driveParam->load());
+    auto toneValue = static_cast<float> (toneParam->load());
+    auto masterValue = static_cast<float> (masterParam->load());
 
     // Amp =============================================================================
     if (fw_state == 1) {
 
         // resample to target sample rate
-        auto block = dsp::AudioBlock<float>(buffer.getArrayOfWritePointers(), 1, numSamples);
+        dsp::AudioBlock<float> block(buffer);
+        //auto block = dsp::AudioBlock<float>(buffer.getArrayOfWritePointers(), 1, numSamples);
         auto block48k = resampler.processIn(block);
+
         // Apply LSTM model
-        LSTM.process(block48k.getChannelPointer(0), driveValue, toneValue, block48k.getChannelPointer(0), (int) block48k.getNumSamples());
-      
+        for (int ch = 0; ch < buffer.getNumChannels(); ++ch)
+        {
+            // Apply LSTM model
+            if (ch == 0) {
+                LSTM.process(block48k.getChannelPointer(0), driveValue, toneValue, block48k.getChannelPointer(0), (int) block48k.getNumSamples());
+            }
+            else if (ch == 1) {
+                LSTM2.process(block48k.getChannelPointer(1), driveValue, toneValue, block48k.getChannelPointer(1), (int) block48k.getNumSamples());
+            }
+        }
+
         // resample back to original sample rate
         resampler.processOut(block48k, block);
 
@@ -185,13 +203,6 @@ void TSM1N3AudioProcessor::processBlock (AudioBuffer<float>& buffer, MidiBuffer&
             previousMasterValue = masterValue;
         }
     }
-
-    // process DC blocker
-    //auto monoBlock = dsp::AudioBlock<float>(buffer).getSingleChannelBlock(0);
-    //dcBlocker.process(dsp::ProcessContextReplacing<float>(monoBlock));
-    
-    for (int ch = 1; ch < buffer.getNumChannels(); ++ch)
-        buffer.copyFrom(ch, 0, buffer, 0, 0, buffer.getNumSamples());
 }
 
 //==============================================================================
@@ -214,6 +225,7 @@ void TSM1N3AudioProcessor::getStateInformation (MemoryBlock& destData)
 
     auto state = treeState.copyState();
     std::unique_ptr<XmlElement> xml (state.createXml());
+    xml->setAttribute ("fw_state", fw_state);
     copyXmlToBinary (*xml, destData);
 }
 
@@ -229,41 +241,11 @@ void TSM1N3AudioProcessor::setStateInformation (const void* data, int sizeInByte
         if (xmlState->hasTagName (treeState.state.getType()))
         {
             treeState.replaceState (juce::ValueTree::fromXml (*xmlState));
-
+            fw_state = xmlState->getBoolAttribute ("fw_state");
             if (auto* editor = dynamic_cast<TSM1N3AudioProcessorEditor*> (getActiveEditor()))
                 editor->resetImages();
         }
     }
-}
-
-/* // UNUSED but kept as a template for future plugins
-float TSM1N3AudioProcessor::convertLogScale(float in_value, float x_min, float x_max, float y_min, float y_max)
-{
-    float b = log(y_max / y_min) / (x_max - x_min);
-    float a = y_max / exp(b * x_max);
-    float converted_value = a * exp(b * in_value);
-    return converted_value;
-}
-*/
-
-float TSM1N3AudioProcessor::decibelToLinear(float dbValue)
-{
-    return powf(10.0, dbValue/20.0);
-}
-
-void TSM1N3AudioProcessor::setDrive(float paramDrive)
-{
-    driveValue = paramDrive;
-}
-
-void TSM1N3AudioProcessor::setTone(float paramTone)
-{
-    toneValue = paramTone;
-}
-
-void TSM1N3AudioProcessor::setMaster(float db_ampMaster)
-{
-    masterValue = db_ampMaster;
 }
 
 
