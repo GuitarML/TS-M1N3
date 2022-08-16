@@ -196,10 +196,10 @@ void TSM1N3AudioProcessor::processBlock (AudioBuffer<float>& buffer, MidiBuffer&
         // Apply ramped changes for gain smoothing
         if (masterValue == previousMasterValue)
         {
-            buffer.applyGain(masterValue);
+            buffer.applyGain(masterValue *1.5);
         }
         else {
-            buffer.applyGainRamp(0, (int) buffer.getNumSamples(), previousMasterValue , masterValue);
+            buffer.applyGainRamp(0, (int) buffer.getNumSamples(), previousMasterValue *1.5 , masterValue *1.5);
             previousMasterValue = masterValue;
         }
     }
