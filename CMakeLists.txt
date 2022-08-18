@@ -9,7 +9,7 @@ include_directories(modules)
 
 juce_set_aax_sdk_path(C:/SDKs/AAX_SDK/)
 
-set(JUCE_FORMATS AU VST3 Standalone)
+set(JUCE_FORMATS AU VST3)
 
 # Build LV2 only on Linux
 if(UNIX AND NOT APPLE)
