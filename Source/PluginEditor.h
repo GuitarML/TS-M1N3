@@ -47,7 +47,7 @@ private:
     Slider ampGainKnob;
     Slider ampMasterKnob;
     Slider ampToneKnob;
-
+    Label versionLabel;
     
     virtual void buttonClicked(Button* button) override;
 

@@ -1,6 +1,15 @@
+#define MyAppPublisher "GuitarML"
+#define MyAppURL "https://guitarml.com"
+#define MyAppName "TS-M1N3"
+
 [Setup]
 AppName=TS-M1N3
 AppVersion=##APPVERSION##
+AppPublisher={#MyAppPublisher}
+AppPublisherURL={#MyAppURL}
+AppSupportURL={#MyAppURL}
+AppUpdatesURL={#MyAppURL}
+DisableProgramGroupPage=yes
 DisableWelcomePage=no
 DisableDirPage=yes
 DefaultDirName={commoncf64}
@@ -9,6 +18,10 @@ OutputBaseFilename="TS-M1N3-Win-##APPVERSION##"
 OutputDir=.
 LicenseFile=../../LICENSE.txt
 SetupIconFile=../../resources/TS-M1N3.ico
+UninstallDisplayIcon=../../resources/TS-M1N3.ico
+UninstallFilesDir={commoncf64}\GuitarML\{#MyAppName}
+Compression=lzma
+SolidCompression=yes
 
 [Types]
 Name: "full"; Description: "Full installation"
