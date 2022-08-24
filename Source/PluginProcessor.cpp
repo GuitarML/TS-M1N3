@@ -171,7 +171,9 @@ void TSM1N3AudioProcessor::processBlock (AudioBuffer<float>& buffer, MidiBuffer&
 
     // Amp =============================================================================
     if (fw_state == 1) {
-
+		//Apply default gain
+        buffer.applyGain(3.0);
+		
         // resample to target sample rate
         dsp::AudioBlock<float> block(buffer);
         //auto block = dsp::AudioBlock<float>(buffer.getArrayOfWritePointers(), 1, numSamples);
@@ -196,10 +198,10 @@ void TSM1N3AudioProcessor::processBlock (AudioBuffer<float>& buffer, MidiBuffer&
         // Apply ramped changes for gain smoothing
         if (masterValue == previousMasterValue)
         {
-            buffer.applyGain(masterValue *1.5);
+            buffer.applyGain(masterValue);
         }
         else {
-            buffer.applyGainRamp(0, (int) buffer.getNumSamples(), previousMasterValue *1.5 , masterValue *1.5);
+            buffer.applyGainRamp(0, (int) buffer.getNumSamples(), previousMasterValue, masterValue);
             previousMasterValue = masterValue;
         }
     }
