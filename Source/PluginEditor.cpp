@@ -68,7 +68,7 @@ TSM1N3AudioProcessorEditor::TSM1N3AudioProcessorEditor (TSM1N3AudioProcessor& p)
     addAndMakeVisible(versionLabel);
     versionLabel.setText("v1.2", juce::NotificationType::dontSendNotification);
     versionLabel.setJustificationType(juce::Justification::left);
-    versionLabel.setColour(juce::Label::textColourId, juce::Colours::black);
+    versionLabel.setColour(juce::Label::textColourId, juce::Colours::white);
     auto font = versionLabel.getFont();
     float height = font.getHeight();
     font.setHeight(height); // 0.75
@@ -113,7 +113,7 @@ void TSM1N3AudioProcessorEditor::resized()
 
     odLED.setBounds(152, 315, 40, 40);
     odFootSw.setBounds(133, 365, 80, 80);
-    versionLabel.setBounds(290, 490, 60, 10);
+    versionLabel.setBounds(302, 488, 60, 10);
 }
 
 
