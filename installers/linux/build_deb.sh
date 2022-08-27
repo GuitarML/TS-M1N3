@@ -3,7 +3,7 @@
 
 # Set the app name and version here
 app_name=TS-M1N3
-version=1.0
+version=1.2
 
 
 # 1. Create the package directory structure and control file

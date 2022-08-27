@@ -54,11 +54,3 @@ target_compile_definitions(TS-M1N3
 target_link_libraries(TS-M1N3 PUBLIC
     juce_plugin_modules
 )
-
-# we need these flags for notarization on MacOS
-option(MACOS_RELEASE "Set build flags for MacOS Release" OFF)
-if(MACOS_RELEASE)
-    message(STATUS "Setting MacOS release flags...")
-    set_target_properties(TS-M1N3_Standalone PROPERTIES
-        XCODE_ATTRIBUTE_ENABLE_HARDENED_RUNTIME YES)
-endif()
