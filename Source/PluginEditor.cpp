@@ -45,34 +45,35 @@ TSM1N3AudioProcessorEditor::TSM1N3AudioProcessorEditor (TSM1N3AudioProcessor& p)
     addAndMakeVisible(ampGainKnob);
     ampGainKnob.setLookAndFeel(&blackHexKnobLAF);
     ampGainKnob.addListener(this);
-    ampGainKnob.setRange(0.0, 1.0);
-    ampGainKnob.setValue(processor.driveValue);
     ampGainKnob.setSliderStyle(juce::Slider::SliderStyle::RotaryVerticalDrag);
     ampGainKnob.setTextBoxStyle(juce::Slider::TextEntryBoxPosition::NoTextBox, false, 50, 20);
-    ampGainKnob.setNumDecimalPlacesToDisplay(1);
     ampGainKnob.setDoubleClickReturnValue(true, 0.5);
 	
     toneSliderAttach = std::make_unique<AudioProcessorValueTreeState::SliderAttachment>(processor.treeState, TONE_ID, ampToneKnob);
     addAndMakeVisible(ampToneKnob);
     ampToneKnob.setLookAndFeel(&blackHexKnobLAF);
     ampToneKnob.addListener(this);
-    ampToneKnob.setRange(0.0, 1.0);
-    ampToneKnob.setValue(processor.toneValue);
     ampToneKnob.setSliderStyle(juce::Slider::SliderStyle::RotaryVerticalDrag);
     ampToneKnob.setTextBoxStyle(juce::Slider::TextEntryBoxPosition::NoTextBox, false, 50, 20 );
-    ampToneKnob.setNumDecimalPlacesToDisplay(1);
     ampToneKnob.setDoubleClickReturnValue(true, 0.5);
 
     masterSliderAttach = std::make_unique<AudioProcessorValueTreeState::SliderAttachment>(processor.treeState, MASTER_ID, ampMasterKnob);
     addAndMakeVisible(ampMasterKnob);
     ampMasterKnob.setLookAndFeel(&blackHexKnobLAF);
     ampMasterKnob.addListener(this);
-    ampMasterKnob.setRange(0.0, 1.0);
-    ampMasterKnob.setValue(processor.masterValue);
     ampMasterKnob.setSliderStyle(juce::Slider::SliderStyle::RotaryVerticalDrag);
     ampMasterKnob.setTextBoxStyle(juce::Slider::TextEntryBoxPosition::NoTextBox, false, 50, 20 );
-    ampMasterKnob.setNumDecimalPlacesToDisplay(1);
     ampMasterKnob.setDoubleClickReturnValue(true, 0.5);
+
+    addAndMakeVisible(versionLabel);
+    versionLabel.setText("v1.2", juce::NotificationType::dontSendNotification);
+    versionLabel.setJustificationType(juce::Justification::left);
+    versionLabel.setColour(juce::Label::textColourId, juce::Colours::white);
+    auto font = versionLabel.getFont();
+    float height = font.getHeight();
+    font.setHeight(height); // 0.75
+    versionLabel.setFont(font);
+
 
     // Size of plugin GUI
     setSize(340, 500);
@@ -112,6 +113,7 @@ void TSM1N3AudioProcessorEditor::resized()
 
     odLED.setBounds(152, 315, 40, 40);
     odFootSw.setBounds(133, 365, 80, 80);
+    versionLabel.setBounds(302, 488, 60, 10);
 }
 
 
@@ -132,13 +134,16 @@ void TSM1N3AudioProcessorEditor::buttonClicked(juce::Button* button)
 void TSM1N3AudioProcessorEditor::sliderValueChanged(Slider* slider)
 {
     // Amp
+    /*
     if (slider == &ampGainKnob)
         processor.setDrive(slider->getValue());
     else if (slider == &ampMasterKnob)
         processor.setMaster(slider->getValue());
     else if (slider == &ampToneKnob) 
         processor.setTone(slider->getValue());
+        */
 }
+
 
 void TSM1N3AudioProcessorEditor::resetImages()
 {
