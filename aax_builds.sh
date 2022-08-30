@@ -75,7 +75,7 @@ fi
 
 # sign with PACE
 aax_location=build-aax/TS-M1N3_artefacts/$build_config/AAX/TS-M1N3.aaxplugin
-wcguid="" # Update
+wcguid="E9587400-8ED1-11EC-AA74-00505692AD3E" # Update
 if [[ "$OSTYPE" == "darwin"* ]]; then
     /Applications/PACEAntiPiracy/Eden/Fusion/Current/bin/wraptool sign --verbose \
         --account keyth72 \

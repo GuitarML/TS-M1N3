@@ -66,26 +66,38 @@ public:
     
     //float convertLogScale(float in_value, float x_min, float x_max, float y_min, float y_max);
 
-    float decibelToLinear(float dbValue);
+    //float decibelToLinear(float dbValue);
 
-    void setDrive(float paramDrive);
-    void setTone(float paramTone);
-    void setMaster(float db_ampMaster);
+    //void setDrive(float paramDrive);
+    //void setTone(float paramTone);
+    //void setMaster(float db_ampMaster);
 
     // Pedal/amp states
     int fw_state = 1; // 0 = off, 1 = on
-    float driveValue = 0.5;
-    float toneValue = 0.5;
-    float masterValue = 0.5;
-    float previousMasterValue = 0.5;
+    //float driveValue = 0.5;
+    //float toneValue = 0.5;
+    //float masterValue = 0.5;
+    //float previousMasterValue = 0.5;
 
-    bool lstm_state = true;;
+    bool lstm_state = true;
 
     RT_LSTM LSTM;
+    RT_LSTM LSTM2;
 
     AudioProcessorValueTreeState treeState;
 
 private:
+
+    //float driveValue = 0.5;
+    //float toneValue = 0.5;
+    //float masterValue = 0.5;
+
+    std::atomic<float>* driveParam = nullptr;
+    std::atomic<float>* toneParam = nullptr;
+    std::atomic<float>* masterParam = nullptr;
+
+    float previousMasterValue = 0.5;
+
     chowdsp::ResampledProcess<chowdsp::ResamplingTypes::SRCResampler<>> resampler;
 
     //dsp::IIR::Filter<float> dcBlocker;  // Unused for TS-M1N3 plugin, leaving commented as template for future plugins

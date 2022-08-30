@@ -40,16 +40,5 @@ $ cmake --build build --config Release
 ```
 The binaries will be located in `TS-M1N3/build/TS-M1N3_artefacts/`
 
-### Build with Projucer 
-
-1. Clone or download this repository.
-2. Download and install [JUCE](https://juce.com/) This project uses the "Projucer" application from the JUCE website. 
-3. Initialize and set up submodules
-```git submodule update --init --recursive```
-4. Open the TS-M1N3.jucer file and in the appropriate Exporter Header Search Path field, enter the appropriate include paths from the modules folder.
-5. Build TS-M1N3 from the Juce Projucer application. 
-
-Note: Make sure to build in Release mode unless actually debugging. Debug mode will not keep up with real time playing.
-
 ### Special Thanks
 Special thanks to the UAH (University of Alabama in Huntsville) [MLAMSK](https://github.com/mlamsk) Senior Design Team, whose research and hard work directly impacted the development of this plugin.

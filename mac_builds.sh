@@ -23,7 +23,6 @@ cmake --build build --config Release -j8 | xcpretty
 mkdir -p bin/Mac
 declare -a plugins=("TS-M1N3")
 for plugin in "${plugins[@]}"; do
-    cp -R build/${plugin}_artefacts/Release/Standalone/${plugin}.app bin/Mac/${plugin}.app
     cp -R build/${plugin}_artefacts/Release/VST3/${plugin}.vst3 bin/Mac/${plugin}.vst3
     cp -R build/${plugin}_artefacts/Release/AU/${plugin}.component bin/Mac/${plugin}.component
 done

@@ -1,16 +1,15 @@
 cmake_minimum_required(VERSION 3.15)
 set(CMAKE_OSX_DEPLOYMENT_TARGET "10.15" CACHE STRING "Minimum OS X deployment target")
-project(TS-M1N3 VERSION 1.1.0)
+project(TS-M1N3 VERSION 1.2.0)
 
 set(CMAKE_CXX_STANDARD 17)
 
 add_subdirectory(modules)
 include_directories(modules)
 
-# Commented out for CI; change path as appropriate
-#juce_set_aax_sdk_path(C:/SDKs/AAX_SDK/)
+juce_set_aax_sdk_path(C:/SDKs/AAX_SDK/)
 
-set(JUCE_FORMATS AU VST3 Standalone)
+set(JUCE_FORMATS AU VST3)
 
 # Build LV2 only on Linux
 if(UNIX AND NOT APPLE)
@@ -55,11 +54,3 @@ target_compile_definitions(TS-M1N3
 target_link_libraries(TS-M1N3 PUBLIC
     juce_plugin_modules
 )
-
-# we need these flags for notarization on MacOS
-option(MACOS_RELEASE "Set build flags for MacOS Release" OFF)
-if(MACOS_RELEASE)
-    message(STATUS "Setting MacOS release flags...")
-    set_target_properties(TS-M1N3_Standalone PROPERTIES
-        XCODE_ATTRIBUTE_ENABLE_HARDENED_RUNTIME YES)
-endif()
