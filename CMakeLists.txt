@@ -29,7 +29,7 @@ juce_add_plugin(TS-M1N3
     PLUGIN_CODE Tsm3 
     FORMATS ${JUCE_FORMATS}
     ProductName "TS-M1N3"
-    LV2_URI https://github.com/GuitarML/TS-M1N3
+    LV2URI https://github.com/GuitarML/TS-M1N3
     ICON_BIG resources/logo.png
     MICROPHONE_PERMISSION_ENABLED TRUE
 )
